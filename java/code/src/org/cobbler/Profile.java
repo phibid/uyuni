@@ -272,8 +272,8 @@ public class Profile extends CobblerObject {
      /**
      * @return the VirtFileSize
      */
-     public int getVirtFileSize() {
-         return (Integer)dataMap.get(VIRT_FILE_SIZE);
+     public double getVirtFileSize() {
+         return (Double)dataMap.get(VIRT_FILE_SIZE);
      }
 
      /**
@@ -357,7 +357,7 @@ public class Profile extends CobblerObject {
       /**
       * @param virtFileSizeIn the VirtFileSize
       */
-      public void  setVirtFileSize(int virtFileSizeIn) {
+      public void  setVirtFileSize(double virtFileSizeIn) {
           modify(VIRT_FILE_SIZE, virtFileSizeIn);
       }
 

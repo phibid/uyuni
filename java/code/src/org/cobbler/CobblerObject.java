@@ -63,7 +63,7 @@ public abstract class CobblerObject {
     /**
      * Helper method used by all cobbler objects to
      * return a version of themselves by UID
-     * @see org.cobbler.Distro.lookupById for example usage..
+     * @see org.cobbler.Distro#lookupById for example usage.
      *
      * @param client the Cobbler Connection
      * @param id the UID of the distro/profile/system record
@@ -110,7 +110,7 @@ public abstract class CobblerObject {
     /**
      * Helper method used by all cobbler objects to
      * return a Map of themselves by name.
-     * @see org.cobbler.Distro.lookupByName for example usage..
+     * @see org.cobbler.Distro#lookupByName for example usage..
      * @param client  the Cobbler Connection
      * @param name the name of the cobbler object
      * @param lookupMethod the name of the xmlrpc

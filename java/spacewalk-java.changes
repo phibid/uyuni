@@ -1,3 +1,5 @@
+- Fix missing remote command history events for big output (bsc#1199656)
+
 -------------------------------------------------------------------
 Fri May 20 00:09:29 CEST 2022 - jgonzalez@suse.com
 

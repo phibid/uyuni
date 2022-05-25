@@ -168,6 +168,7 @@ public class SystemRecord extends CobblerObject {
      * @param connection the cobbler connection
      * @return a list of systems.
      */
+    @SuppressWarnings("unchecked")
     public static List<SystemRecord> list(CobblerConnection connection) {
         List<SystemRecord> systems = new LinkedList<>();
         List<Map<String, Object>> cSystems = (List<Map<String, Object>>)

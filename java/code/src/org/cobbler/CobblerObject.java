@@ -27,12 +27,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 
 /**
  * Base class has attributes common to
  * distros, profiles, system records
+ *
  * @author paji
  */
 public abstract class CobblerObject {
@@ -58,25 +60,26 @@ public abstract class CobblerObject {
 
     protected String handle;
     protected Map<String, Object> dataMap = new HashMap<>();
+    protected Map<String, Object> dataMapResolved = new HashMap<>();
     protected CobblerConnection client;
 
     /**
      * Helper method used by all cobbler objects to
      * return a version of themselves by UID
-     * @see org.cobbler.Distro#lookupById for example usage.
      *
-     * @param client the Cobbler Connection
-     * @param id the UID of the distro/profile/system record
+     * @param client     the Cobbler Connection
+     * @param id         the UID of the distro/profile/system record
      * @param findMethod the find xmlrpc method, eg: find_distro
      * @return true if the cobbler object was found.
+     * @see org.cobbler.Distro#lookupById for example usage.
      */
     protected static Map<String, Object> lookupDataMapById(CobblerConnection client,
-                             String id, String findMethod) {
+                                                           String id, String findMethod) {
         if (id == null) {
             return null;
         }
         List<Map<String, Object>> objects = lookupDataMapsByCriteria(client,
-                                                            UID, id, findMethod);
+                UID, id, findMethod);
         if (!objects.isEmpty()) {
             return objects.get(0);
         }
@@ -86,23 +89,24 @@ public abstract class CobblerObject {
 
     /**
      * look up data maps by a certain criteria
-     * @param client the xmlrpc client
-     * @param critera (i.e. uid profile, etc..)
-     * @param value the value of the criteria
+     *
+     * @param client     the xmlrpc client
+     * @param critera    (i.e. uid profile, etc..)
+     * @param value      the value of the criteria
      * @param findMethod the find method to use (find_system, find_profile)
      * @return List of maps
      */
+    @SuppressWarnings("unchecked")
     protected static List<Map<String, Object>> lookupDataMapsByCriteria(
             CobblerConnection client, String critera, String value, String findMethod) {
         if (value == null) {
             return null;
         }
 
-        Map<String, String> criteria  = new HashMap<>();
+        Map<String, String> criteria = new HashMap<>();
         criteria.put(critera, value);
-        List<Map<String, Object>> objects = (List<Map<String, Object>>)
-                                client.invokeTokenMethod(findMethod, criteria);
-        return objects;
+        return (List<Map<String, Object>>)
+                client.invokeTokenMethod(findMethod, criteria);
 
     }
 
@@ -110,15 +114,17 @@ public abstract class CobblerObject {
     /**
      * Helper method used by all cobbler objects to
      * return a Map of themselves by name.
-     * @see org.cobbler.Distro#lookupByName for example usage..
-     * @param client  the Cobbler Connection
-     * @param name the name of the cobbler object
+     *
+     * @param client       the Cobbler Connection
+     * @param name         the name of the cobbler object
      * @param lookupMethod the name of the xmlrpc
-     *                       method to lookup: eg get_profile for profile
+     *                     method to lookup: eg get_profile for profile
      * @return the Cobbler Object Data Map or null
+     * @see org.cobbler.Distro#lookupByName for example usage..
      */
+    @SuppressWarnings("unchecked")
     protected static Map<String, Object> lookupDataMapByName(CobblerConnection client,
-                                    String name, String lookupMethod) {
+                                                             String name, String lookupMethod) {
         Object obj = client.invokeMethod(lookupMethod, name);
         if ("~".equals(obj)) {
             return null;
@@ -131,10 +137,15 @@ public abstract class CobblerObject {
     }
 
     protected abstract void invokeModify(String key, Object value);
+
     protected abstract void invokeSave();
+
     protected abstract boolean invokeRemove();
+
     protected abstract String invokeGetHandle();
+
     protected abstract void reload();
+
     protected abstract void invokeRename(String newName);
 
     protected final Object getResolvedValue(String key) {
@@ -153,6 +164,12 @@ public abstract class CobblerObject {
         dataMap.put(key, value);
     }
 
+    protected void modifyResolved(String key, Object value) {
+        // FIXME: Not implemented server side
+        // invokeModifyResolved(key, value);
+        dataMapResolved.put(key, value);
+    }
+
     /**
      * calls save object to complete the commit
      */
@@ -162,6 +179,7 @@ public abstract class CobblerObject {
 
     /**
      * removes the kickstart object from cobbler.
+     *
      * @return true if successful
      */
     public boolean remove() {
@@ -173,7 +191,7 @@ public abstract class CobblerObject {
      * @return the comment
      */
     public String getComment() {
-        return (String)dataMap.get(COMMENT);
+        return (String) dataMap.get(COMMENT);
     }
 
 
@@ -187,24 +205,48 @@ public abstract class CobblerObject {
     /**
      * @return the managementClasses
      */
-    public List<String> getManagementClasses() {
-        return (List<String>)dataMap.get(MGMT_CLASSES);
+    @SuppressWarnings("unchecked")
+    public Optional<List<String>> getManagementClasses() {
+        if (String.valueOf(dataMap.get(MGMT_CLASSES)).equals(INHERIT_KEY)) {
+            return Optional.empty();
+        }
+        return Optional.of((List<String>) dataMap.get(MGMT_CLASSES));
     }
 
+    /**
+     * @return the managementClasses
+     */
+    @SuppressWarnings("unchecked")
+    public List<String> getManagementClassesResolved() {
+        return (List<String>) dataMapResolved.get(MGMT_CLASSES);
+    }
 
     /**
      * @param managementClassesIn the managementClasses to set
      */
-    public void setManagementClasses(List<String> managementClassesIn) {
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    public void setManagementClasses(Optional<List<String>> managementClassesIn) {
+        if (managementClassesIn.isEmpty()) {
+            modify(MGMT_CLASSES, INHERIT_KEY);
+            return;
+        }
         modify(MGMT_CLASSES, managementClassesIn);
+    }
+
+    /**
+     * @param managementClassesIn TODO
+     */
+    public void setManagementClassesResolved(List<String> managementClassesIn) {
+        modifyResolved(MGMT_CLASSES, managementClassesIn);
     }
 
 
     /**
      * @return the templateFiles
      */
+    @SuppressWarnings("unchecked")
     public Map<String, String> getTemplateFiles() {
-        return (Map<String, String>)dataMap.get(TEMPLATE_FILES);
+        return (Map<String, String>) dataMap.get(TEMPLATE_FILES);
     }
 
 
@@ -220,7 +262,7 @@ public abstract class CobblerObject {
      * @return the uid
      */
     public String getUid() {
-        return (String)dataMap.get(UID);
+        return (String) dataMap.get(UID);
     }
 
     /**
@@ -242,7 +284,7 @@ public abstract class CobblerObject {
      * @return the parent
      */
     public String getParent() {
-        return (String)dataMap.get(PARENT);
+        return (String) dataMap.get(PARENT);
     }
 
 
@@ -256,8 +298,9 @@ public abstract class CobblerObject {
     /**
      * @return the owners
      */
+    @SuppressWarnings("unchecked")
     public List<String> getOwners() {
-        return (List<String>)dataMap.get(OWNERS);
+        return (List<String>) dataMap.get(OWNERS);
     }
 
 
@@ -272,7 +315,7 @@ public abstract class CobblerObject {
      * @return the created
      */
     public Date getCreated() {
-        Double time = (Double)dataMap.get(CTIME);
+        Double time = (Double) dataMap.get(CTIME);
         // cobbler deals with seconds since epoch, Date expects milliseconds. Convert.
         return new Date(time.longValue() * 1000);
     }
@@ -306,7 +349,7 @@ public abstract class CobblerObject {
      * @return the depth
      */
     public int getDepth() {
-        return (Integer)dataMap.get(DEPTH);
+        return (Integer) dataMap.get(DEPTH);
     }
 
     /**
@@ -331,8 +374,9 @@ public abstract class CobblerObject {
 
     /**
      * Gets resolved kernel options as a dictionary
-     *
+     * <p>
      * The resolved value includes all the options inherited from above.
+     *
      * @return the kernel option map
      */
     @SuppressWarnings("unchecked")
@@ -354,8 +398,9 @@ public abstract class CobblerObject {
 
     /**
      * Gets resolved kernel post options as a dictionary
-     *
+     * <p>
      * The resolved value includes all the options inherited from above.
+     *
      * @return the kernel post option map
      */
     @SuppressWarnings("unchecked")
@@ -363,12 +408,13 @@ public abstract class CobblerObject {
         return (Map<String, Object>) getResolvedValue(KERNEL_OPTIONS_POST);
     }
 
+    @SuppressWarnings("unchecked")
     private String convertOptionsMap(Map<String, Object> map) {
         StringBuilder string = new StringBuilder();
         for (String key : map.keySet()) {
             List<String> keyList;
             try {
-                 keyList = (List)map.get(key);
+                keyList = (List<String>) map.get(key);
             }
             catch (ClassCastException e) {
                 keyList = new ArrayList<>();
@@ -418,15 +464,16 @@ public abstract class CobblerObject {
     /**
      * @return the kernelMeta
      */
+    @SuppressWarnings("unchecked")
     public Map<String, Object> getKsMeta() {
-        return (Map<String, Object>)dataMap.get(KS_META);
+        return (Map<String, Object>) dataMap.get(KS_META);
     }
 
 
     /**
      * @param kernelMetaIn the kernelMeta to set
      */
-    public void setKsMeta(Map<String, ? extends Object> kernelMetaIn) {
+    public void setKsMeta(Map<String, ?> kernelMetaIn) {
         modify(SET_KS_META, kernelMetaIn);
     }
 
@@ -435,7 +482,7 @@ public abstract class CobblerObject {
      * @return the name
      */
     public String getName() {
-        return (String)dataMap.get(NAME);
+        return (String) dataMap.get(NAME);
     }
 
     /**
@@ -477,6 +524,7 @@ public abstract class CobblerObject {
 
     /**
      * get the red hat management key
+     *
      * @return returns the red hat key as a string
      */
     public String getRedHatManagementKey() {
@@ -485,23 +533,23 @@ public abstract class CobblerObject {
 
     /**
      * get the redhate management key as a Set of keys
+     *
      * @return returns the red hat key as a string
      */
     public Set<String> getRedHatManagementKeySet() {
         String keys = StringUtils.defaultString(getRedHatManagementKey());
         String[] sets = (keys).split(",");
-        Set set = new HashSet();
-        set.addAll(Arrays.asList(sets));
-        return set;
+        return new HashSet<>(Arrays.asList(sets));
     }
 
     /**
      * remove the specified keys from the key set and add the specified set
+     *
      * @param keysToRemove list of tokens to remove
-     * @param keysToAdd list of tokens to add
+     * @param keysToAdd    list of tokens to add
      */
     public void syncRedHatManagementKeys(Collection<String> keysToRemove,
-                                            Collection<String> keysToAdd) {
+                                         Collection<String> keysToAdd) {
         Set<String> keySet = getRedHatManagementKeySet();
         keySet.removeAll(keysToRemove);
         keySet.addAll(keysToAdd);

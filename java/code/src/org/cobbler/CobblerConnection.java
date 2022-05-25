@@ -45,7 +45,7 @@ public class CobblerConnection {
     /**
      * Constructor to just connect the client to the server
      * NO token is setup.. Client has to call token
-     * @param url  cobbler base url, example http://localhost
+     * @param url  cobbler base url, example {@code http://localhost}
      * @throws XmlRpcException if there some communication issue..
      */
 
@@ -64,7 +64,7 @@ public class CobblerConnection {
      * user name and password.. Connects to cobbler
      * and logs in the user right here to obtain the
      * token
-     * @param url  cobbler base url, example http://localhost
+     * @param url  cobbler base url, example {@code http://localhost}
      * @param user the username
      * @param pass the password
      * @throws XmlRpcException if there some communication issue..
@@ -79,7 +79,7 @@ public class CobblerConnection {
      * the token itself.. Connects to cobbler. Idea here
      * is that if you have the xmlrpc token by logging in previously
      * you could use that here..
-     * @param url cobbler base url, example http://localhost
+     * @param url cobbler base url, example {@code http://localhost}
      * @param tokenIn the token
      * @throws XmlRpcException if there some communication issue..
      */

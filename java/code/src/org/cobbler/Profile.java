@@ -29,47 +29,95 @@ import java.util.Set;
 
 
 /**
+ * Cobbler Profile
+ *
  * @author paji
+ * @see <a href="https://cobbler.readthedocs.io/en/v3.3.3/code-autodoc/cobbler.items.html#module-cobbler.items.profile">RTFD - Cobbler - 3.3.3 - Profile</a>
  */
-
 public class Profile extends CobblerObject {
 
     /**
      * Logger for this class
      */
     private static Logger log = LogManager.getLogger(Profile.class);
-
+    /**
+     * TODO
+     */
     private static final String DHCP_TAG = "dhcp_tag";
+    /**
+     * TODO
+     */
     private static final String KICKSTART = "autoinstall";
+    /**
+     * TODO
+     */
     private static final String VIRT_BRIDGE = "virt_bridge";
+    /**
+     * TODO
+     */
     private static final String VIRT_CPUS = "virt_cpus";
+    /**
+     * TODO
+     */
     private static final String VIRT_TYPE = "virt_type";
+    /**
+     * TODO
+     */
     private static final String REPOS = "repos";
+    /**
+     * TODO
+     */
     private static final String VIRT_PATH = "virt_path";
+    /**
+     * TODO
+     */
     private static final String SERVER = "server";
+    /**
+     * TODO
+     */
     private static final String NAME_SERVERS = "name_servers";
+    /**
+     * TODO
+     */
     private static final String ENABLE_MENU = "enable_menu";
+    /**
+     * TODO
+     */
     private static final String VIRT_FILE_SIZE = "virt_file_size";
+    /**
+     * TODO
+     */
     private static final String VIRT_RAM = "virt_ram";
+    /**
+     * TODO
+     */
     private static final String DISTRO = "distro";
 
-    /** Cobbler profile name for default PXE boot */
+    /**
+     * Cobbler profile name for default PXE boot
+     */
     public static final String BOOTSTRAP_NAME = "pxe-default-profile";
 
 
+    /**
+     * TODO
+     *
+     * @param clientIn
+     */
     private Profile(CobblerConnection clientIn) {
         client = clientIn;
     }
 
     /**
      * Create a new kickstart profile in cobbler
+     *
      * @param client the xmlrpc client
-     * @param name the profile name
+     * @param name   the profile name
      * @param distro the distro allocated to this profile.
      * @return the newly created profile
      */
     public static Profile create(CobblerConnection client,
-                                String name, Distro distro) {
+                                 String name, Distro distro) {
         Profile profile = new Profile(client);
         profile.handle = (String) client.invokeTokenMethod("new_profile");
         profile.modify(NAME, name);
@@ -81,8 +129,9 @@ public class Profile extends CobblerObject {
 
     /**
      * Returns a kickstart profile matching the given name or null
+     *
      * @param client the xmlrpc client
-     * @param name the profile name
+     * @param name   the profile name
      * @return the profile that maps to the name or null
      */
     public static Profile lookupByName(CobblerConnection client, String name) {
@@ -90,9 +139,10 @@ public class Profile extends CobblerObject {
     }
 
     /**
-     *  Returns the profile matching the given uid or null
+     * Returns the profile matching the given uid or null
+     *
      * @param client client the xmlrpc client
-     * @param id the uid of the profile
+     * @param id     the uid of the profile
      * @return the profile matching the given uid or null
      */
     public static Profile lookupById(CobblerConnection client, String id) {
@@ -100,7 +150,7 @@ public class Profile extends CobblerObject {
             return null;
         }
         return handleLookup(client, lookupDataMapById(client, id,
-                                        "find_profile"));
+                "find_profile"));
     }
 
     private static Profile handleLookup(CobblerConnection client, Map profileMap) {
@@ -111,15 +161,17 @@ public class Profile extends CobblerObject {
         }
         return null;
     }
+
     /**
      * Returns a list of available profiles
+     *
      * @param connection the cobbler connection
      * @return a list of profiles.
      */
     public static List<Profile> list(CobblerConnection connection) {
         List<Profile> profiles = new LinkedList<>();
         List<Map<String, Object>> cProfiles = (List<Map<String, Object>>)
-                                        connection.invokeMethod("get_profiles");
+                connection.invokeMethod("get_profiles");
 
         for (Map<String, Object> profMap : cProfiles) {
             Profile profile = new Profile(connection);
@@ -132,15 +184,16 @@ public class Profile extends CobblerObject {
 
     /**
      * Returns a list of available profiles minus the excludes list
+     *
      * @param connection the cobbler connection
-     * @param excludes a list of cobbler ids to file on
+     * @param excludes   a list of cobbler ids to file on
      * @return a list of profiles.
      */
     public static List<Profile> list(CobblerConnection connection,
-                                Set<String> excludes) {
+                                     Set<String> excludes) {
         List<Profile> profiles = new LinkedList<>();
         List<Map<String, Object>> cProfiles = (List<Map<String, Object>>)
-                                        connection.invokeMethod("get_profiles");
+                connection.invokeMethod("get_profiles");
 
         for (Map<String, Object> profMap : cProfiles) {
             Profile profile = new Profile(connection);
@@ -154,14 +207,28 @@ public class Profile extends CobblerObject {
         return profiles;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     protected String invokeGetHandle() {
-        return (String)client.invokeTokenMethod("get_profile_handle", this.getName());
+        return (String) client.invokeTokenMethod("get_profile_handle", this.getName());
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     protected void invokeModify(String key, Object value) {
         client.invokeTokenMethod("modify_profile", getHandle(), key, value);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    protected void invokeModifyResolved(String key, Object value) {
+        // TODO
     }
 
     /**
@@ -189,242 +256,254 @@ public class Profile extends CobblerObject {
         dataMap = newProfile.dataMap;
     }
 
-    /* (non-Javadoc)
-     * @see org.cobbler.CobblerObject#renameTo(java.lang.String)
+    /**
+     * @inheritDoc
      */
-
     @Override
     protected void invokeRename(String newNameIn) {
         client.invokeTokenMethod("rename_profile", getHandle(), newNameIn);
     }
 
     /**
-
+     * TODO
+     *
      * @return the DhcpTag
      */
-     public String getDhcpTag() {
-         return (String)dataMap.get(DHCP_TAG);
-     }
+    public String getDhcpTag() {
+        return (String) dataMap.get(DHCP_TAG);
+    }
 
-     /**
+    /**
      * @return the Kickstart file path
      */
-     public String getKickstart() {
-         return getFullAutoinstallPath((String)dataMap.get(KICKSTART));
-     }
+    public String getKickstart() {
+        return getFullAutoinstallPath((String) dataMap.get(KICKSTART));
+    }
 
-     /**
+    /**
      * @return the VirtBridge
      */
-     public String getVirtBridge() {
-         return (String)dataMap.get(VIRT_BRIDGE);
-     }
+    public String getVirtBridge() {
+        return (String) dataMap.get(VIRT_BRIDGE);
+    }
 
-     /**
+    /**
      * @return the VirtCpus
      */
-     public int getVirtCpus() {
-         return (Integer)dataMap.get(VIRT_CPUS);
-     }
+    public int getVirtCpus() {
+        return (Integer) dataMap.get(VIRT_CPUS);
+    }
 
-     /**
+    /**
      * @return the VirtType
      */
-     public String getVirtType() {
-         return (String)dataMap.get(VIRT_TYPE);
-     }
+    public String getVirtType() {
+        return (String) dataMap.get(VIRT_TYPE);
+    }
 
-     /**
+    /**
      * @return the Repos
      */
-     public List<String> getRepos() {
-         return (List<String>)dataMap.get(REPOS);
-     }
+    public List<String> getRepos() {
+        return (List<String>) dataMap.get(REPOS);
+    }
 
-     /**
+    /**
      * @return the VirtPath
      */
-     public String getVirtPath() {
-         return (String)dataMap.get(VIRT_PATH);
-     }
+    public String getVirtPath() {
+        return (String) dataMap.get(VIRT_PATH);
+    }
 
-     /**
+    /**
      * @return the Server
      */
-     public String getServer() {
-         return (String)dataMap.get(SERVER);
-     }
+    public String getServer() {
+        return (String) dataMap.get(SERVER);
+    }
 
-     /**
+    /**
      * @return the NameServers
      */
-     public String getNameServers() {
-         return (String)dataMap.get(NAME_SERVERS);
-     }
+    public String getNameServers() {
+        return (String) dataMap.get(NAME_SERVERS);
+    }
 
-     /**
+    /**
      * @return true if menu enabled
      */
-     public boolean menuEnabled() {
-         return 1 == (Integer)dataMap.get(ENABLE_MENU);
-     }
+    public boolean menuEnabled() {
+        return 1 == (Integer) dataMap.get(ENABLE_MENU);
+    }
 
-     /**
+    /**
      * @return the VirtFileSize
      */
-     public double getVirtFileSize() {
-         return (Double)dataMap.get(VIRT_FILE_SIZE);
-     }
+    public double getVirtFileSize() {
+        return (Double) dataMap.get(VIRT_FILE_SIZE);
+    }
 
-     /**
+    /**
      * @return the VirtRam
      */
-     public int getVirtRam() {
-         return (Integer)dataMap.get(VIRT_RAM);
-     }
+    public int getVirtRam() {
+        return (Integer) dataMap.get(VIRT_RAM);
+    }
 
-     /**
+    /**
      * @return the Distro
      */
-     public Distro getDistro() {
-         String distroName = (String)dataMap.get(DISTRO);
-         return Distro.lookupByName(client, distroName);
-     }
+    public Distro getDistro() {
+        String distroName = (String) dataMap.get(DISTRO);
+        return Distro.lookupByName(client, distroName);
+    }
 
-     /**
-      * @param dhcpTagIn the DhcpTag
-      */
-      public void  setDhcpTag(String dhcpTagIn) {
-          modify(DHCP_TAG, dhcpTagIn);
-      }
+    /**
+     * @param dhcpTagIn the DhcpTag
+     */
+    public void setDhcpTag(String dhcpTagIn) {
+        modify(DHCP_TAG, dhcpTagIn);
+    }
 
-      /**
-      * @param kickstartIn the Kickstart
-      */
-      public void  setKickstart(String kickstartIn) {
-          modify(KICKSTART, "/" + getRelativeAutoinstallPath(kickstartIn));
-      }
+    /**
+     * @param kickstartIn the Kickstart
+     */
+    public void setKickstart(String kickstartIn) {
+        modify(KICKSTART, "/" + getRelativeAutoinstallPath(kickstartIn));
+    }
 
-      /**
-      * @param virtBridgeIn the VirtBridge
-      */
-      public void  setVirtBridge(String virtBridgeIn) {
-          modify(VIRT_BRIDGE, virtBridgeIn);
-      }
+    /**
+     * @param virtBridgeIn the VirtBridge
+     */
+    public void setVirtBridge(String virtBridgeIn) {
+        modify(VIRT_BRIDGE, virtBridgeIn);
+    }
 
-      /**
-      * @param virtCpusIn the VirtCpus
-      */
-      public void  setVirtCpus(int virtCpusIn) {
-          modify(VIRT_CPUS, virtCpusIn);
-      }
+    /**
+     * @param virtCpusIn the VirtCpus
+     */
+    public void setVirtCpus(int virtCpusIn) {
+        modify(VIRT_CPUS, virtCpusIn);
+    }
 
-      /**
-      * @param virtTypeIn the VirtType
-      */
-      public void  setVirtType(String virtTypeIn) {
-          modify(VIRT_TYPE, virtTypeIn);
-      }
+    /**
+     * @param virtTypeIn the VirtType
+     */
+    public void setVirtType(String virtTypeIn) {
+        modify(VIRT_TYPE, virtTypeIn);
+    }
 
-      /**
-      * @param reposIn the Repos
-      */
-      public void  setRepos(List<String> reposIn) {
-          modify(REPOS, reposIn);
-      }
+    /**
+     * @param reposIn the Repos
+     */
+    public void setRepos(List<String> reposIn) {
+        modify(REPOS, reposIn);
+    }
 
-      /**
-      * @param virtPathIn the VirtPath
-      */
-      public void  setVirtPath(String virtPathIn) {
-          modify(VIRT_PATH, virtPathIn);
-      }
+    /**
+     * @param virtPathIn the VirtPath
+     */
+    public void setVirtPath(String virtPathIn) {
+        modify(VIRT_PATH, virtPathIn);
+    }
 
-      /**
-      * @param serverIn the Server
-      */
-      public void  setServer(String serverIn) {
-          modify(SERVER, serverIn);
-      }
+    /**
+     * @param serverIn the Server
+     */
+    public void setServer(String serverIn) {
+        modify(SERVER, serverIn);
+    }
 
-      /**
-      * @param enableMenuIn the EnableMenu
-      */
-      public void  setEnableMenu(boolean enableMenuIn) {
-          modify(ENABLE_MENU, enableMenuIn ? 1 : 0);
-      }
+    /**
+     * @param enableMenuIn the EnableMenu
+     */
+    public void setEnableMenu(boolean enableMenuIn) {
+        modify(ENABLE_MENU, enableMenuIn ? 1 : 0);
+    }
 
-      /**
-      * @param virtFileSizeIn the VirtFileSize
-      */
-      public void  setVirtFileSize(double virtFileSizeIn) {
-          modify(VIRT_FILE_SIZE, virtFileSizeIn);
-      }
+    /**
+     * @param virtFileSizeIn the VirtFileSize
+     */
+    public void setVirtFileSize(double virtFileSizeIn) {
+        modify(VIRT_FILE_SIZE, virtFileSizeIn);
+    }
 
-      /**
-      * @param virtRamIn the VirtRam
-      */
-      public void  setVirtRam(int virtRamIn) {
-          modify(VIRT_RAM, virtRamIn);
-      }
+    /**
+     * @param virtRamIn the VirtRam
+     */
+    public void setVirtRam(int virtRamIn) {
+        modify(VIRT_RAM, virtRamIn);
+    }
 
-      /**
-      * @param distroIn the Distro
-      */
-      public void  setDistro(Distro distroIn) {
-          if (distroIn == null) {
-              log.warn("Profile.setDistro was called with null.  This shouldn't happen, " +
-                 "so we're ignoring");
-              return;
-          }
-          setDistro(distroIn.getName());
-      }
+    /**
+     * @param distroIn the Distro
+     */
+    public void setDistro(Distro distroIn) {
+        if (distroIn == null) {
+            log.warn("Profile.setDistro was called with null.  This shouldn't happen, " +
+                    "so we're ignoring");
+            return;
+        }
+        setDistro(distroIn.getName());
+    }
 
-      /**
-      * @param name the Distr name
-      */
-      public void  setDistro(String name) {
-          modify(DISTRO, name);
-      }
+    /**
+     * @param name the Distr name
+     */
+    public void setDistro(String name) {
+        modify(DISTRO, name);
+    }
 
-      /**
-       * Generates the kickstart text and returns that
-       * @return the generated kickstart text
-       */
-      public String generateKickstart() {
-          return (String)client.invokeTokenMethod("generate_kickstart", getName());
-      }
+    /**
+     * Generates the kickstart text and returns that
+     *
+     * @return the generated kickstart text
+     */
+    public String generateKickstart() {
+        return (String) client.invokeTokenMethod("generate_kickstart", getName());
+    }
 
-      /**
-       *
-       * {@inheritDoc}
-       */
-      public void syncRedHatManagementKeys(Collection<String> keysToRemove,
-                                                  Collection<String> keysToAdd) {
-          super.syncRedHatManagementKeys(keysToRemove, keysToAdd);
-          for (SystemRecord record :
-                      SystemRecord.listByAssociatedProfile(client, this.getName())) {
-              record.syncRedHatManagementKeys(keysToRemove, keysToAdd);
-              record.save();
-          }
-      }
+    /**
+     * {@inheritDoc}
+     */
+    public void syncRedHatManagementKeys(Collection<String> keysToRemove,
+                                         Collection<String> keysToAdd) {
+        super.syncRedHatManagementKeys(keysToRemove, keysToAdd);
+        for (SystemRecord record :
+                SystemRecord.listByAssociatedProfile(client, this.getName())) {
+            record.syncRedHatManagementKeys(keysToRemove, keysToAdd);
+            record.save();
+        }
+    }
 
-      private String getFullAutoinstallPath(String pathIn) {
-          String cobblerPath = ConfigDefaults.get().getKickstartConfigDir();
-          if (pathIn.startsWith(cobblerPath)) {
-              return pathIn;
-          }
-          return StringUtil.addPath(cobblerPath, pathIn);
-      }
+    /**
+     * TODO
+     *
+     * @param pathIn
+     * @return
+     */
+    private String getFullAutoinstallPath(String pathIn) {
+        String cobblerPath = ConfigDefaults.get().getKickstartConfigDir();
+        if (pathIn.startsWith(cobblerPath)) {
+            return pathIn;
+        }
+        return StringUtil.addPath(cobblerPath, pathIn);
+    }
 
-      private String getRelativeAutoinstallPath(String pathIn) {
-          String cobblerPath = ConfigDefaults.get().getKickstartConfigDir();
-          if (!cobblerPath.endsWith("/")) {
-              cobblerPath += "/";
-          }
-          if (pathIn.startsWith(cobblerPath)) {
-              return pathIn.substring(cobblerPath.length());
-          }
-          return pathIn;
-      }
+    /**
+     * TODO
+     *
+     * @param pathIn
+     * @return
+     */
+    private String getRelativeAutoinstallPath(String pathIn) {
+        String cobblerPath = ConfigDefaults.get().getKickstartConfigDir();
+        if (!cobblerPath.endsWith("/")) {
+            cobblerPath += "/";
+        }
+        if (pathIn.startsWith(cobblerPath)) {
+            return pathIn.substring(cobblerPath.length());
+        }
+        return pathIn;
+    }
 }

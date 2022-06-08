@@ -17,6 +17,9 @@ package org.cobbler;
 
 
 /**
+ * Exception that signals that the remote server has thrown an exception.
+ *
+ * @see <a href="http://xmlrpc.com/spec.md#fault-example">XML-RPC Spec - Fault example</a>
  * @author paji
  */
 public class XmlRpcException extends RuntimeException {

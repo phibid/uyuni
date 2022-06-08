@@ -23,24 +23,79 @@ import java.util.Map;
 import java.util.Set;
 
 
+/**
+ * Cobbler System
+ *
+ * @see <a href="https://cobbler.readthedocs.io/en/v3.3.3/code-autodoc/cobbler.items.html#module-cobbler.items.system">RTFD - Cobbler - 3.3.3 - System</a>
+ */
 public class SystemRecord extends CobblerObject {
+    /**
+     * TODO
+     */
     private static final String HOSTNAME = "hostname";
+    /**
+     * TODO
+     */
     private static final String NAME_SERVERS = "name_servers";
+    /**
+     * TODO
+     */
     private static final String GATEWAY = "gateway";
+    /**
+     * TODO
+     */
     private static final String PROFILE = "profile";
+    /**
+     * TODO
+     */
     private static final String SERVER = "server";
+    /**
+     * TODO
+     */
     private static final String VIRT_BRIDGE = "virt_bridge";
+    /**
+     * TODO
+     */
     private static final String VIRT_CPUS = "virt_cpus";
+    /**
+     * TODO
+     */
     private static final String VIRT_TYPE = "virt_type";
+    /**
+     * TODO
+     */
     private static final String VIRT_PATH = "virt_path";
+    /**
+     * TODO
+     */
     private static final String VIRT_FILE_SIZE = "virt_file_size";
+    /**
+     * TODO
+     */
     private static final String VIRT_RAM = "virt_ram";
+    /**
+     * TODO
+     */
     private static final String NETBOOT_ENABLED = "netboot_enabled";
+    /**
+     * TODO
+     */
     public static final String REDHAT_MGMT_SERVER = "redhat_management_server";
+    /**
+     * TODO
+     */
     private static final String SET_INTERFACES = "modify_interface";
+    /**
+     * TODO
+     */
     private static final String GET_INTERFACES = "interface";
+    /**
+     * TODO
+     */
     private static final String IPV6_AUTOCONF = "ipv6_autoconfiguration";
-    /** Cobbler system name for default PXE boot */
+    /**
+     * Cobbler system name for default PXE boot
+     */
     public static final String BOOTSTRAP_NAME = "default";
 
     /**
@@ -79,14 +134,15 @@ public class SystemRecord extends CobblerObject {
 
     /**
      * Create a new system record in cobbler
-     * @param client the xmlrpc client
-     * @param name the system record name
+     *
+     * @param client  the xmlrpc client
+     * @param name    the system record name
      * @param profile the profile to be associated to this system
      * @return the newly created system record
      */
     public static SystemRecord create(CobblerConnection client,
-                                String name,
-                                Profile profile) {
+                                      String name,
+                                      Profile profile) {
         SystemRecord sys = new SystemRecord(client);
         sys.handle = (String) client.invokeTokenMethod("new_system");
         sys.modify(NAME, name);
@@ -98,14 +154,15 @@ public class SystemRecord extends CobblerObject {
 
     /**
      * Create a new system record in Cobbler, based on an image
+     *
      * @param client the xmlrpc client
-     * @param name the system record name
-     * @param image the image to be associated to this system
+     * @param name   the system record name
+     * @param image  the image to be associated to this system
      * @return the newly created system record
      */
     public static SystemRecord create(CobblerConnection client,
-                                String name,
-                                Image image) {
+                                      String name,
+                                      Image image) {
         SystemRecord sys = new SystemRecord(client);
         sys.handle = (String) client.invokeTokenMethod("new_system");
         sys.modify(NAME, name);
@@ -117,8 +174,9 @@ public class SystemRecord extends CobblerObject {
 
     /**
      * Returns a system record matching the given name or null
+     *
      * @param client the xmlrpc client
-     * @param name the system name
+     * @param name   the system name
      * @return the system that maps to the name or null
      */
     public static SystemRecord lookupByName(CobblerConnection client, String name) {
@@ -126,9 +184,10 @@ public class SystemRecord extends CobblerObject {
     }
 
     /**
-     *  Returns the system matching the given uid or null
+     * Returns the system matching the given uid or null
+     *
      * @param client client the xmlrpc client
-     * @param id the uid of the system record
+     * @param id     the uid of the system record
      * @return the system record matching the given uid or null
      */
     public static SystemRecord lookupById(CobblerConnection client, String id) {
@@ -137,15 +196,16 @@ public class SystemRecord extends CobblerObject {
 
     /**
      * List all SystemRecords associated with a particular profile
-     * @param client the xmlrpc client
+     *
+     * @param client      the xmlrpc client
      * @param profileName the profile name (Cobbler profile name)
      * @return the List of SystemRecords
      */
     public static List<SystemRecord> listByAssociatedProfile(CobblerConnection client,
-                                                                    String profileName) {
+                                                             String profileName) {
         List<SystemRecord> toReturn = new ArrayList<>();
-        List<Map<String, Object>> maps =  lookupDataMapsByCriteria(
-                        client, PROFILE, profileName, "find_system");
+        List<Map<String, Object>> maps = lookupDataMapsByCriteria(
+                client, PROFILE, profileName, "find_system");
 
         for (Map map : maps) {
             toReturn.add(handleLookup(client, map));
@@ -165,6 +225,7 @@ public class SystemRecord extends CobblerObject {
 
     /**
      * Returns a list of available systems
+     *
      * @param connection the cobbler connection
      * @return a list of systems.
      */
@@ -172,7 +233,7 @@ public class SystemRecord extends CobblerObject {
     public static List<SystemRecord> list(CobblerConnection connection) {
         List<SystemRecord> systems = new LinkedList<>();
         List<Map<String, Object>> cSystems = (List<Map<String, Object>>)
-                                        connection.invokeMethod("get_systems");
+                connection.invokeMethod("get_systems");
 
         for (Map<String, Object> sysMap : cSystems) {
             SystemRecord sys = new SystemRecord(connection);
@@ -185,15 +246,16 @@ public class SystemRecord extends CobblerObject {
 
     /**
      * Returns a list of available systems minus the excludes list
+     *
      * @param connection the cobbler connection
-     * @param excludes a list of cobbler ids to file on
+     * @param excludes   a list of cobbler ids to file on
      * @return a list of systems.
      */
     public static List<SystemRecord> list(CobblerConnection connection,
-                                Set<String> excludes) {
+                                          Set<String> excludes) {
         List<SystemRecord> systems = new LinkedList<>();
         List<Map<String, Object>> cSystems = (List<Map<String, Object>>)
-                                        connection.invokeMethod("get_systems");
+                connection.invokeMethod("get_systems");
 
         for (Map<String, Object> sysMap : cSystems) {
             SystemRecord sys = new SystemRecord(connection);
@@ -207,12 +269,20 @@ public class SystemRecord extends CobblerObject {
 
     @Override
     protected String invokeGetHandle() {
-        return (String)client.invokeTokenMethod("get_system_handle", this.getName());
+        return (String) client.invokeTokenMethod("get_system_handle", this.getName());
     }
 
     @Override
     protected void invokeModify(String key, Object value) {
         client.invokeTokenMethod("modify_system", getHandle(), key, value);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    protected void invokeModifyResolved(String key, Object value) {
+        // TODO
     }
 
     /**
@@ -240,10 +310,9 @@ public class SystemRecord extends CobblerObject {
         dataMap = newSystem.dataMap;
     }
 
-    /* (non-Javadoc)
-     * @see org.cobbler.CobblerObject#renameTo(java.lang.String)
+    /**
+     * @inheritDoc
      */
-
     @Override
     protected void invokeRename(String newNameIn) {
         client.invokeTokenMethod("rename_system", getHandle(), newNameIn);
@@ -256,7 +325,7 @@ public class SystemRecord extends CobblerObject {
      * @return true if the command was successful
      */
     public boolean powerOn() {
-        return (Boolean)client.invokeTokenMethod("power_system", getHandle(), "on");
+        return (Boolean) client.invokeTokenMethod("power_system", getHandle(), "on");
     }
 
     /**
@@ -266,7 +335,7 @@ public class SystemRecord extends CobblerObject {
      * @return true if the command was successful
      */
     public boolean powerOff() {
-        return (Boolean)client.invokeTokenMethod("power_system", getHandle(), "off");
+        return (Boolean) client.invokeTokenMethod("power_system", getHandle(), "off");
     }
 
     /**
@@ -277,7 +346,7 @@ public class SystemRecord extends CobblerObject {
      */
     public boolean reboot() {
         return (Boolean)
-            client.invokeTokenMethod("power_system", getHandle(), "reboot");
+                client.invokeTokenMethod("power_system", getHandle(), "reboot");
     }
 
     /**
@@ -290,220 +359,231 @@ public class SystemRecord extends CobblerObject {
         return (Boolean) client.invokeTokenMethod("power_system", getHandle(), "status");
     }
 
-     /**
+    /**
      * @return the Cobbler Profile name
      */
-     public Profile getProfile() {
-         return Profile.lookupByName(client, (String)dataMap.get(PROFILE));
-     }
+    public Profile getProfile() {
+        return Profile.lookupByName(client, (String) dataMap.get(PROFILE));
+    }
 
-     /**
-      * @return the Cobbler Image
-      */
-     public Image getImage() {
-         return Image.lookupByName(client, (String)dataMap.get(IMAGE));
-     }
+    /**
+     * @return the Cobbler Image
+     */
+    public Image getImage() {
+        return Image.lookupByName(client, (String) dataMap.get(IMAGE));
+    }
 
-     /**
+    /**
      * @return the VirtBridge
      */
-     public String getVirtBridge() {
-         return (String)dataMap.get(VIRT_BRIDGE);
-     }
+    public String getVirtBridge() {
+        return (String) dataMap.get(VIRT_BRIDGE);
+    }
 
-     /**
+    /**
      * @return the VirtCpus
      */
-     public int getVirtCpus() {
-         return (Integer)dataMap.get(VIRT_CPUS);
-     }
+    public int getVirtCpus() {
+        return (Integer) dataMap.get(VIRT_CPUS);
+    }
 
-     /**
+    /**
      * @return the VirtType
      */
-     public String getVirtType() {
-         return (String)dataMap.get(VIRT_TYPE);
-     }
+    public String getVirtType() {
+        return (String) dataMap.get(VIRT_TYPE);
+    }
 
-     /**
+    /**
      * @return the VirtPath
      */
-     public String getVirtPath() {
-         return (String)dataMap.get(VIRT_PATH);
-     }
+    public String getVirtPath() {
+        return (String) dataMap.get(VIRT_PATH);
+    }
 
-     /**
+    /**
      * @return the VirtFileSize
      */
-     public int getVirtFileSize() {
-         return (Integer)dataMap.get(VIRT_FILE_SIZE);
-     }
+    public int getVirtFileSize() {
+        return (Integer) dataMap.get(VIRT_FILE_SIZE);
+    }
 
-     /**
+    /**
      * @return the VirtRam
      */
-     public int getVirtRam() {
-         return (Integer)dataMap.get(VIRT_RAM);
-     }
+    public int getVirtRam() {
+        return (Integer) dataMap.get(VIRT_RAM);
+    }
 
-     /**
-      * true if netboot enabled is true
-      * false other wise
-      * @return netboot enabled value
-      */
-     public boolean isNetbootEnabled() {
-         return Boolean.TRUE.toString().
-             equalsIgnoreCase((String.valueOf(dataMap.get(NETBOOT_ENABLED))));
-     }
+    /**
+     * true if netboot enabled is true
+     * false other wise
+     *
+     * @return netboot enabled value
+     */
+    public boolean isNetbootEnabled() {
+        return Boolean.TRUE.toString().
+                equalsIgnoreCase((String.valueOf(dataMap.get(NETBOOT_ENABLED))));
+    }
 
-      /**
-      * @param virtBridgeIn the VirtBridge
-      */
-      public void setVirtBridge(String virtBridgeIn) {
-          modify(VIRT_BRIDGE, virtBridgeIn);
-      }
+    /**
+     * @param virtBridgeIn the VirtBridge
+     */
+    public void setVirtBridge(String virtBridgeIn) {
+        modify(VIRT_BRIDGE, virtBridgeIn);
+    }
 
-      /**
-      * @param virtCpusIn the VirtCpus
-      */
-      public void setVirtCpus(int virtCpusIn) {
-          modify(VIRT_CPUS, virtCpusIn);
-      }
+    /**
+     * @param virtCpusIn the VirtCpus
+     */
+    public void setVirtCpus(int virtCpusIn) {
+        modify(VIRT_CPUS, virtCpusIn);
+    }
 
-      /**
-      * @param virtTypeIn the VirtType
-      */
-      public void setVirtType(String virtTypeIn) {
-          modify(VIRT_TYPE, virtTypeIn);
-      }
+    /**
+     * @param virtTypeIn the VirtType
+     */
+    public void setVirtType(String virtTypeIn) {
+        modify(VIRT_TYPE, virtTypeIn);
+    }
 
-      /**
-      * @param virtPathIn the VirtPath
-      */
-      public void setVirtPath(String virtPathIn) {
-          modify(VIRT_PATH, virtPathIn);
-      }
+    /**
+     * @param virtPathIn the VirtPath
+     */
+    public void setVirtPath(String virtPathIn) {
+        modify(VIRT_PATH, virtPathIn);
+    }
 
-      /**
-      * @param virtFileSizeIn the VirtFileSize
-      */
-      public void  setVirtFileSize(int virtFileSizeIn) {
-          modify(VIRT_FILE_SIZE, virtFileSizeIn);
-      }
+    /**
+     * @param virtFileSizeIn the VirtFileSize
+     */
+    public void setVirtFileSize(int virtFileSizeIn) {
+        modify(VIRT_FILE_SIZE, virtFileSizeIn);
+    }
 
-      /**
-      * @param virtRamIn the VirtRam
-      */
-      public void  setVirtRam(int virtRamIn) {
-          modify(VIRT_RAM, virtRamIn);
-      }
+    /**
+     * @param virtRamIn the VirtRam
+     */
+    public void setVirtRam(int virtRamIn) {
+        modify(VIRT_RAM, virtRamIn);
+    }
 
-      /**
-       * Enable netboot
-       * @param enable true to enable net boot.
-       */
-      public void enableNetboot(boolean enable) {
-          modify(NETBOOT_ENABLED, enable);
-      }
+    /**
+     * Enable netboot
+     *
+     * @param enable true to enable net boot.
+     */
+    public void enableNetboot(boolean enable) {
+        modify(NETBOOT_ENABLED, enable);
+    }
 
-      /**
-       * @param nameServersIn the NameServers
-       */
-      public void  setNameServers(List<String> nameServersIn) {
-          modify(NAME_SERVERS, nameServersIn);
-      }
+    /**
+     * @param nameServersIn the NameServers
+     */
+    public void setNameServers(List<String> nameServersIn) {
+        modify(NAME_SERVERS, nameServersIn);
+    }
 
-      /**
-       * @param gateway the Gateway
-       */
-      public void  setGateway(String gateway) {
-          modify(GATEWAY, gateway);
-      }
-      /**
-       * @param hostname the hostname
-       */
-      public void  setHostName(String hostname) {
-          modify(HOSTNAME, hostname);
-      }
+    /**
+     * @param gateway the Gateway
+     */
+    public void setGateway(String gateway) {
+        modify(GATEWAY, gateway);
+    }
 
-      /**
-       * Associates a profile to this system record
-       * @param profile the profile to associate
-       */
-      public void  setProfile(Profile profile) {
-          setProfile(profile.getName());
-      }
+    /**
+     * @param hostname the hostname
+     */
+    public void setHostName(String hostname) {
+        modify(HOSTNAME, hostname);
+    }
 
-      /**
-       * Associates a profile to this system record
-       * @param profileName the name of the profile
-       */
-      public void  setProfile(String profileName) {
-          modify(PROFILE, profileName);
-      }
+    /**
+     * Associates a profile to this system record
+     *
+     * @param profile the profile to associate
+     */
+    public void setProfile(Profile profile) {
+        setProfile(profile.getName());
+    }
 
-      /**
-       * Associates an image to this system record
-       * @param image the image to associate
-       */
-      public void setImage(Image image) {
-          setImage(image.getName());
-      }
+    /**
+     * Associates a profile to this system record
+     *
+     * @param profileName the name of the profile
+     */
+    public void setProfile(String profileName) {
+        modify(PROFILE, profileName);
+    }
 
-      /**
-       * Associates an image to this system record
-       * @param imageName the name of the image
-       */
-      public void  setImage(String imageName) {
-          modify(IMAGE, imageName);
-      }
+    /**
+     * Associates an image to this system record
+     *
+     * @param image the image to associate
+     */
+    public void setImage(Image image) {
+        setImage(image.getName());
+    }
 
-      /**
-       * Sets the cobbler server host information for this system
-       * @param server the server host name.
-       */
-      public void  setServer(String server) {
-          modify(SERVER, server);
-      }
+    /**
+     * Associates an image to this system record
+     *
+     * @param imageName the name of the image
+     */
+    public void setImage(String imageName) {
+        modify(IMAGE, imageName);
+    }
 
-      /**
-       * Sets IPv6 autoconfiguration on
-       * @param ipv6Autoconf boolean to indicate autoconf
-       */
-      public void setIpv6Autoconfiguration(boolean ipv6Autoconf) {
-          modify(IPV6_AUTOCONF, ipv6Autoconf);
-      }
+    /**
+     * Sets the cobbler server host information for this system
+     *
+     * @param server the server host name.
+     */
+    public void setServer(String server) {
+        modify(SERVER, server);
+    }
 
-      /**
-       * Sets the network interfaces available to this system
-       * @param interfaces a list of network interfaces
-       */
-      public void setNetworkInterfaces(List<Network> interfaces) {
-          Map<String, Object> ifaces = new HashMap<>();
-          for (Network net : interfaces) {
-              ifaces.putAll(net.toMap());
-          }
-          modify(SET_INTERFACES, ifaces);
-      }
+    /**
+     * Sets IPv6 autoconfiguration on
+     *
+     * @param ipv6Autoconf boolean to indicate autoconf
+     */
+    public void setIpv6Autoconfiguration(boolean ipv6Autoconf) {
+        modify(IPV6_AUTOCONF, ipv6Autoconf);
+    }
 
-      /**
-       * @return a list of network interfaces associated to this system
-       */
-      public List<Network>  getNetworkInterfaces() {
-          reload();
-          List<Network> networks = new LinkedList<>();
-          Map<String, Map<String, Object>> interfaces = (Map<String, Map<String, Object>>)
-                                                      dataMap.get(GET_INTERFACES);
-          if (interfaces != null) {
-              for (String name : interfaces.keySet()) {
-                  networks.add(Network.load(client, name, interfaces.get(name)));
-              }
-          }
-          return networks;
-      }
+    /**
+     * Sets the network interfaces available to this system
+     *
+     * @param interfaces a list of network interfaces
+     */
+    public void setNetworkInterfaces(List<Network> interfaces) {
+        Map<String, Object> ifaces = new HashMap<>();
+        for (Network net : interfaces) {
+            ifaces.putAll(net.toMap());
+        }
+        modify(SET_INTERFACES, ifaces);
+    }
+
+    /**
+     * @return a list of network interfaces associated to this system
+     */
+    public List<Network> getNetworkInterfaces() {
+        reload();
+        List<Network> networks = new LinkedList<>();
+        Map<String, Map<String, Object>> interfaces = (Map<String, Map<String, Object>>)
+                dataMap.get(GET_INTERFACES);
+        if (interfaces != null) {
+            for (String name : interfaces.keySet()) {
+                networks.add(Network.load(client, name, interfaces.get(name)));
+            }
+        }
+        return networks;
+    }
 
     /**
      * Gets the power management scheme/protocol for this system
+     *
      * @return the type name
      */
     public String getPowerType() {
@@ -512,6 +592,7 @@ public class SystemRecord extends CobblerObject {
 
     /**
      * Gets the IP address or hostname for this system's power management
+     *
      * @return the address
      */
     public String getPowerAddress() {
@@ -520,6 +601,7 @@ public class SystemRecord extends CobblerObject {
 
     /**
      * Gets the username for this system's power management system
+     *
      * @return the username
      */
     public String getPowerUsername() {
@@ -528,6 +610,7 @@ public class SystemRecord extends CobblerObject {
 
     /**
      * Gets the password for this system's power management system
+     *
      * @return the password
      */
     public String getPowerPassword() {
@@ -539,6 +622,7 @@ public class SystemRecord extends CobblerObject {
      * is usually a type-specific identifier for the system or port to be
      * managed (eg. plug number on WTI, blade id on DRAC, etc.). See
      * https://github.com/cobbler/cobbler/wiki/Power%20Management
+     *
      * @return the ID
      */
     public String getPowerId() {
@@ -547,6 +631,7 @@ public class SystemRecord extends CobblerObject {
 
     /**
      * Sets the power management scheme/protocol for this system
+     *
      * @param powerType the type name
      */
     public void setPowerType(String powerType) {
@@ -555,6 +640,7 @@ public class SystemRecord extends CobblerObject {
 
     /**
      * Sets the IP address or hostname for this system's power management
+     *
      * @param powerAddress the address
      */
     public void setPowerAddress(String powerAddress) {
@@ -563,6 +649,7 @@ public class SystemRecord extends CobblerObject {
 
     /**
      * Sets the username for this system's power management system
+     *
      * @param powerUsername the username
      */
     public void setPowerUsername(String powerUsername) {
@@ -571,6 +658,7 @@ public class SystemRecord extends CobblerObject {
 
     /**
      * Sets the password for this system's power management system
+     *
      * @param powerPassword the password
      */
     public void setPowerPassword(String powerPassword) {
@@ -582,6 +670,7 @@ public class SystemRecord extends CobblerObject {
      * is usually a type-specific identifier for the system or port to be
      * managed (eg. plug number on WTI, blade id on DRAC, etc.). See
      * https://github.com/cobbler/cobbler/wiki/Power%20Management
+     *
      * @param powerId the ID
      */
     public void setPowerId(String powerId) {

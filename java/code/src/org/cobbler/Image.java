@@ -24,6 +24,8 @@ import java.util.Map;
 
 /**
  * Encapsulates an Image object in Cobbler.
+ *
+ * @see <a href="https://cobbler.readthedocs.io/en/v3.3.3/code-autodoc/cobbler.items.html#module-cobbler.items.image">RTFD - Cobbler - 3.3.3 - Image</a>
  */
 public class Image extends CobblerObject {
 
@@ -165,46 +167,48 @@ public class Image extends CobblerObject {
         modify(FILE, fileIn);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.cobbler.CobblerObject#invokeModify(java.lang.String,
-     * java.lang.Object)
+    /**
+     * @inheritDoc
      */
     @Override
     protected void invokeModify(String key, Object value) {
         client.invokeTokenMethod("modify_image", getHandle(), key, value);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.cobbler.CobblerObject#invokeSave()
+    /**
+     * @inheritDoc
+     */
+    @Override
+    protected void invokeModifyResolved(String key, Object value) {
+        // TODO
+    }
+
+    /**
+     * @inheritDoc
      */
     @Override
     protected void invokeSave() {
         client.invokeTokenMethod("save_image", getHandle());
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.cobbler.CobblerObject#invokeRemove()
+    /**
+     * @inheritDoc
      */
     @Override
     protected boolean invokeRemove() {
         return (Boolean) client.invokeTokenMethod("remove_image", getName());
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.cobbler.CobblerObject#invokeGetHandle()
+    /**
+     * @inheritDoc
      */
     @Override
     protected String invokeGetHandle() {
         return (String) client.invokeTokenMethod("get_image_handle", this.getName());
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.cobbler.CobblerObject#reload()
+    /**
+     * @inheritDoc
      */
     @Override
     protected void reload() {
@@ -212,9 +216,8 @@ public class Image extends CobblerObject {
         dataMap = newImage.dataMap;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.cobbler.CobblerObject#invokeRename(java.lang.String)
+    /**
+     * @inheritDoc
      */
     @Override
     protected void invokeRename(String newName) {

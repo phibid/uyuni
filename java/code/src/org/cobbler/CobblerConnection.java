@@ -26,25 +26,41 @@ import java.util.List;
 import redstone.xmlrpc.XmlRpcClient;
 
 /**
- *
  * XMLRPCHelper - class that contains wraps calls to Redstone's XMLRPC client.
  * Intentionally implements the XMLRPCInvoker interface so we can also provide
- * a mock implementation to our unit tests so they don't require an actual cobbler
- * server.
+ * a mock implementation to our unit tests, so they don't require an actual
+ * Cobbler server.
+ *
  * @author paji
  */
 public class CobblerConnection {
+    /**
+     * Encapsulated Redstone XML-RPC client
+     */
     private XmlRpcClient client;
+    /**
+     * Computed URL that contains the Cobbler API endpoint
+     */
     private String actualUrl;
+    /**
+     * Logger that is responsible to write the called methods to the Cobbler API
+     */
     private static Logger log = LogManager.getLogger(CobblerConnection.class);
+    /**
+     * Contains the currently valid token
+     */
     private String token;
 
+    /**
+     * Default empty constructor that does not contain any initialization code
+     */
     protected CobblerConnection() {
     }
 
     /**
-     * Constructor to just connect the client to the server
-     * NO token is setup.. Client has to call token
+     * Constructor to just connect the client to the server NO token is
+     * setup. Client has to call {@link #setToken}.
+     *
      * @param url  cobbler base url, example {@code http://localhost}
      * @throws XmlRpcException if there some communication issue..
      */
@@ -60,10 +76,9 @@ public class CobblerConnection {
     }
 
     /**
-     * Constructor to setup the client based on
-     * user name and password.. Connects to cobbler
-     * and logs in the user right here to obtain the
-     * token
+     * Constructor to setup the client based on username and password.
+     * Connects to cobbler and logs in the user right here to obtain the token.
+     *
      * @param url  cobbler base url, example {@code http://localhost}
      * @param user the username
      * @param pass the password
@@ -75,10 +90,9 @@ public class CobblerConnection {
     }
 
     /**
-     * Constructor to setup the client based on
-     * the token itself.. Connects to cobbler. Idea here
-     * is that if you have the xmlrpc token by logging in previously
-     * you could use that here..
+     * Constructor to setup the client based on the token itself. Connects to
+     * cobbler. Idea here is that if you have the XML-RPC token by logging in
+     * previously you could use that here.
      * @param url cobbler base url, example {@code http://localhost}
      * @param tokenIn the token
      * @throws XmlRpcException if there some communication issue..
@@ -89,12 +103,12 @@ public class CobblerConnection {
     }
 
     /**
-     * Simple method to login in to cobbler with the given
-     * user name and password.. The returned token
-     * is stored in the connection itself so that it
-     * could be used for futre operations.. It
-     * is also returned if so needed.
-     * @param login user name
+     * Simple method to login in to cobbler with the given username and
+     * password. The returned token is stored in the connection itself so that
+     * it could be used for future operations. It is also returned if so
+     * needed.
+     *
+     * @param login username
      * @param password password
      * @return the login token
      */
@@ -105,7 +119,8 @@ public class CobblerConnection {
 
 
     /**
-     * Invoke an XMLRPC method.
+     * Invoke an XML-RPC method.
+     *
      * @param procedureName to invoke
      * @param args to pass to method
      * @return Object returned.
@@ -123,7 +138,8 @@ public class CobblerConnection {
     }
 
     /**
-     * Invoke an XMLRPC method.
+     * Invoke an XML-RPC method.
+     *
      * @param procedureName to invoke
      * @param args to pass to method
      * @return Object returned.
@@ -133,11 +149,10 @@ public class CobblerConnection {
     }
 
     /**
-     * Invoke an XMLRPC method,
-     * but this one appends the cobbler xmlrpc
-     * token at the end of the args. Basically this
-     * serves the majority of calls to cobbler
-     *  where token is exxpected as the last param..
+     * Invoke an XML-RPC method, but this one appends the cobbler XML-RPC
+     * token at the end of the args. Basically this serves the majority of
+     * calls to cobbler where token is expected as the last param.
+     *
      * @param procedureName to invoke
      * @param args to pass to method
      * @return Object returned.
@@ -151,7 +166,8 @@ public class CobblerConnection {
     }
 
     /**
-     * updates the token
+     * Updates the token with the provided one. Validity of it is not checked.
+     *
      * @param tokenIn the cobbler auth token
      */
     public void setToken(String tokenIn) {
@@ -160,6 +176,7 @@ public class CobblerConnection {
 
     /**
      * Returns the actual cobbler server url including the suffix
+     *
      * @return the server URL
      */
     public String getUrl() {
@@ -168,6 +185,7 @@ public class CobblerConnection {
 
     /**
      * Returns the cobbler server version
+     *
      * @return the server version
      */
     public Double getVersion() {

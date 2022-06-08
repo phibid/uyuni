@@ -22,16 +22,33 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Cobbler Distribution
+ *
+ * @see <a href="https://cobbler.readthedocs.io/en/v3.3.3/code-autodoc/cobbler.items.html#module-cobbler.items.distro">RTFD - Cobbler - 3.3.3 - Distro</a>
  * @author paji
  */
 public class Distro extends CobblerObject {
+    /** TODO */
     private static final String KERNEL = "kernel";
-
+    /** TODO */
     private static final String ARCH = "arch";
+    /** TODO */
     private static final String BREED = "breed";
+    /**
+     * TODO
+     */
     private static final String OS_VERSION = "os_version";
+    /**
+     * TODO
+     */
     private static final String INITRD = "initrd";
+    /**
+     * TODO
+     */
     private static final String SOURCE_REPOS = "source_repos";
+    /**
+     * TODO
+     */
     private static final String TREE_BUILD_TIME = "tree_build_time";
 
     /** Cobbler distro name for default PXE boot */
@@ -43,6 +60,7 @@ public class Distro extends CobblerObject {
 
     /**
      * Returns a distro matching the given name or null
+     *
      * @param client the xmlrpc client
      * @param name the distro name
      * @return the distro that maps to the name or null
@@ -53,6 +71,7 @@ public class Distro extends CobblerObject {
 
     /**
      * Returns a distro matching the given uid or null
+     *
      * @param client the xmlrpc client
      * @param id the uid to search for
      * @return the distro matching the UID
@@ -62,6 +81,13 @@ public class Distro extends CobblerObject {
                                         id, "find_distro"));
     }
 
+    /**
+     * TODO
+     *
+     * @param client
+     * @param distroMap
+     * @return
+     */
     private static Distro handleLookup(CobblerConnection client, Map distroMap) {
         if (distroMap != null) {
             Distro distro = new Distro(client);
@@ -73,6 +99,7 @@ public class Distro extends CobblerObject {
 
     /**
      * Returns a list of available Distros
+     *
      * @param connection the cobbler connection
      * @return a list of Distros.
      */
@@ -89,14 +116,30 @@ public class Distro extends CobblerObject {
         return distros;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     protected String invokeGetHandle() {
         return (String)client.invokeTokenMethod("get_distro_handle", this.getName());
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     @Override
     protected void invokeModify(String key, Object value) {
         client.invokeTokenMethod("modify_distro", getHandle(), key, value);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    protected void invokeModifyResolved(String key, Object value) {
+        // TODO
     }
 
     /**

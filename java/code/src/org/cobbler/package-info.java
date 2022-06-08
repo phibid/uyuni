@@ -12,7 +12,10 @@
  * granted to use or replicate Red Hat trademarks that are incorporated
  * in this software or its documentation.
  */
-package org.cobbler.test;
-
-public class NetworkTest {
-}
+/**
+ * This package is targeted against Cobbler 3.3.3.
+ *
+ * @author egotthold
+ * @see <a href="https://cobbler.readthedocs.io/en/v3.3.3/">RTFD - Cobbler - 3.3.3</a>
+ */
+package org.cobbler;

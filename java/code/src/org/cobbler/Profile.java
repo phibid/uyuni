@@ -100,9 +100,9 @@ public class Profile extends CobblerObject {
 
 
     /**
-     * TODO
+     * Constructor that enabled the profile to be created, read, modified or deleted
      *
-     * @param clientIn
+     * @param clientIn The Cobbler connection used to communicate with the server
      */
     private Profile(CobblerConnection clientIn) {
         client = clientIn;
@@ -265,7 +265,7 @@ public class Profile extends CobblerObject {
     }
 
     /**
-     * TODO
+     * Getter for the DHCP Tag
      *
      * @return the DhcpTag
      */
@@ -477,10 +477,10 @@ public class Profile extends CobblerObject {
     }
 
     /**
-     * TODO
+     * This method converts a relative path required by Cobbler to an absolute filepath on the server
      *
-     * @param pathIn
-     * @return
+     * @param pathIn The path to convert
+     * @return The absolute path on the server
      */
     private String getFullAutoinstallPath(String pathIn) {
         String cobblerPath = ConfigDefaults.get().getKickstartConfigDir();
@@ -491,10 +491,10 @@ public class Profile extends CobblerObject {
     }
 
     /**
-     * TODO
+     * This method converts an absolute path on the server to a relative one that is required by Cobbler
      *
-     * @param pathIn
-     * @return
+     * @param pathIn The path to convert
+     * @return The relative path
      */
     private String getRelativeAutoinstallPath(String pathIn) {
         String cobblerPath = ConfigDefaults.get().getKickstartConfigDir();

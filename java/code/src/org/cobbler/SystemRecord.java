@@ -374,42 +374,60 @@ public class SystemRecord extends CobblerObject {
     }
 
     /**
+     * TODO
+     *
      * @return the VirtBridge
+     * @cobbler.inheritable TODO
      */
     public String getVirtBridge() {
         return (String) dataMap.get(VIRT_BRIDGE);
     }
 
     /**
+     * TODO
+     *
      * @return the VirtCpus
+     * @cobbler.inheritable TODO
      */
     public int getVirtCpus() {
         return (Integer) dataMap.get(VIRT_CPUS);
     }
 
     /**
+     * TODO
+     *
      * @return the VirtType
+     * @cobbler.inheritable TODO
      */
     public String getVirtType() {
         return (String) dataMap.get(VIRT_TYPE);
     }
 
     /**
+     * TODO
+     *
      * @return the VirtPath
+     * @cobbler.inheritable TODO
      */
     public String getVirtPath() {
         return (String) dataMap.get(VIRT_PATH);
     }
 
     /**
+     * TODO
+     *
      * @return the VirtFileSize
+     * @cobbler.inheritable TODO
      */
     public int getVirtFileSize() {
         return (Integer) dataMap.get(VIRT_FILE_SIZE);
     }
 
     /**
+     * TODO
+     *
      * @return the VirtRam
+     * @cobbler.inheritable TODO
      */
     public int getVirtRam() {
         return (Integer) dataMap.get(VIRT_RAM);
@@ -479,6 +497,7 @@ public class SystemRecord extends CobblerObject {
 
     /**
      * @param nameServersIn the NameServers
+     * @cobbler.inheritable TODO
      */
     public void setNameServers(List<String> nameServersIn) {
         modify(NAME_SERVERS, nameServersIn);
@@ -532,6 +551,16 @@ public class SystemRecord extends CobblerObject {
      */
     public void setImage(String imageName) {
         modify(IMAGE, imageName);
+    }
+
+    /**
+     * TODO
+     *
+     * @return TODO
+     * @cobbler.inheritable TODO
+     */
+    public String getServer() {
+        return (String) dataMap.get(SERVER);
     }
 
     /**

@@ -342,6 +342,7 @@ public abstract class CobblerObject {
 
     /**
      * Getter for the management classes in their raw form
+     * TODO
      *
      * @return the managementClasses
      * @cobbler.inheritable This property can have the value
@@ -567,6 +568,7 @@ public abstract class CobblerObject {
      * Getter for the kernel options
      *
      * @return the kernelOptions
+     * @cobbler.inheritable TODO
      */
     @SuppressWarnings("unchecked")
     public String getKernelOptions() {
@@ -593,6 +595,7 @@ public abstract class CobblerObject {
      * Getter for the post kernel options
      *
      * @return the kernelOptionsPost
+     * @cobbler.inheritable TODO
      */
     @SuppressWarnings("unchecked")
     public String getKernelOptionsPost() {
@@ -688,6 +691,7 @@ public abstract class CobblerObject {
 
     /**
      * Retrieves the raw auto-installation metadata for the object.
+     * TODO
      *
      * @return The kernelMeta. It could be that this returns {@link #INHERIT_KEY} instead of a Map.
      * @cobbler.inheritable This property has a matching resolved method. {@link #getResolvedAutoinstallMeta()}
@@ -795,6 +799,7 @@ public abstract class CobblerObject {
      * separated string in Cobbler.
      *
      * @return returns the red hat key(s) as a string
+     * @cobbler.inheritable TODO
      */
     public String getRedHatManagementKey() {
         return (String) dataMap.get(REDHAT_KEY);

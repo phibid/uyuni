@@ -281,21 +281,30 @@ public class Profile extends CobblerObject {
     }
 
     /**
+     * TODO
+     *
      * @return the VirtBridge
+     * @cobbler.inheritable TODO
      */
     public String getVirtBridge() {
         return (String) dataMap.get(VIRT_BRIDGE);
     }
 
     /**
+     * TODO
+     *
      * @return the VirtCpus
+     * @cobbler.inheritable TODO
      */
     public int getVirtCpus() {
         return (Integer) dataMap.get(VIRT_CPUS);
     }
 
     /**
+     * TODO
+     *
      * @return the VirtType
+     * @cobbler.inheritable TODO
      */
     public String getVirtType() {
         return (String) dataMap.get(VIRT_TYPE);
@@ -309,21 +318,30 @@ public class Profile extends CobblerObject {
     }
 
     /**
+     * TODO
+     *
      * @return the VirtPath
+     * @cobbler.inheritable TODO
      */
     public String getVirtPath() {
         return (String) dataMap.get(VIRT_PATH);
     }
 
     /**
+     * TODO
+     *
      * @return the Server
+     * @cobbler.inheritable TODO
      */
     public String getServer() {
         return (String) dataMap.get(SERVER);
     }
 
     /**
+     * TODO
+     *
      * @return the NameServers
+     * @cobbler.inheritable TODO
      */
     public String getNameServers() {
         return (String) dataMap.get(NAME_SERVERS);
@@ -337,14 +355,20 @@ public class Profile extends CobblerObject {
     }
 
     /**
+     * TODO
+     *
      * @return the VirtFileSize
+     * @cobbler.inheritable TODO
      */
     public double getVirtFileSize() {
         return (Double) dataMap.get(VIRT_FILE_SIZE);
     }
 
     /**
+     * TODO
+     *
      * @return the VirtRam
+     * @cobbler.inheritable TODO
      */
     public int getVirtRam() {
         return (Integer) dataMap.get(VIRT_RAM);

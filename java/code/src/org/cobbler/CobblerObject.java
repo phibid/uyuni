@@ -503,7 +503,7 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Getter for the object creation time
      *
      * @return the created
      */
@@ -514,7 +514,7 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Setter for the object creation time
      *
      * @param createdIn the created to set
      */
@@ -524,7 +524,7 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Getter for the last modified date
      *
      * @return the modified
      */
@@ -535,7 +535,7 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Setter for the modified date
      *
      * @param modifiedIn the modified to set
      */
@@ -545,7 +545,7 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Getter for the object depth
      *
      * @return the depth
      */
@@ -554,7 +554,7 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Setter for the object depth
      *
      * @param depthIn the depth to set
      */
@@ -564,7 +564,7 @@ public abstract class CobblerObject {
 
 
     /**
-     * TODO
+     * Getter for the kernel options
      *
      * @return the kernelOptions
      */
@@ -590,7 +590,7 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Getter for the post kernel options
      *
      * @return the kernelOptionsPost
      */
@@ -616,10 +616,11 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Converts a Java Map to a String that can be understood by Cobbler and
+     * then be converted to a Dictionary.
      *
-     * @param map TODO
-     * @return TODO
+     * @param map The map to convert
+     * @return The intended String
      */
     @SuppressWarnings("unchecked")
     private String convertOptionsMap(Map<String, Object> map) {
@@ -647,7 +648,7 @@ public abstract class CobblerObject {
 
 
     /**
-     * TODO
+     * Setter for the kernel options
      *
      * @param kernelOptionsIn the kernelOptions to set
      */
@@ -656,7 +657,7 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Setter for the kernel options
      *
      * @param kernelOptionsIn the kernelOptions to set in the form of a map
      */
@@ -666,9 +667,10 @@ public abstract class CobblerObject {
 
     /**
      * Setter for the kernel post options via {@link #INHERIT_KEY} or as a
-     * string that is splittable by Pythons shelx.split function.
+     * string that is splittable by Pythons {@code shelx.split} function.
      *
      * @param kernelOptionsPostIn the kernelOptionsPost to set
+     * @see <a href="https://docs.python.org/3/library/shlex.html#shlex.split">Python - shlex.split</a>
      */
     public void setKernelOptionsPost(String kernelOptionsPostIn) {
         modify(SET_KERNEL_OPTIONS_POST, kernelOptionsPostIn);

@@ -24,34 +24,42 @@ import java.util.Map;
 /**
  * Cobbler Distribution
  *
- * @see <a href="https://cobbler.readthedocs.io/en/v3.3.3/code-autodoc/cobbler.items.html#module-cobbler.items.distro">RTFD - Cobbler - 3.3.3 - Distro</a>
  * @author paji
+ * @see <a href="https://cobbler.readthedocs.io/en/v3.3.3/code-autodoc/cobbler.items.html#module-cobbler.items.distro">RTFD - Cobbler - 3.3.3 - Distro</a>
  */
 public class Distro extends CobblerObject {
-    /** TODO */
+    /**
+     * Constant to define the field name for the Cobbler kernel property
+     */
     private static final String KERNEL = "kernel";
-    /** TODO */
+    /**
+     * Constant to define the field name for the Cobbler architecture property
+     */
     private static final String ARCH = "arch";
-    /** TODO */
+    /**
+     * Constant to define the field name for the Cobbler OS breed property
+     */
     private static final String BREED = "breed";
     /**
-     * TODO
+     * Constant to define the field name for the Cobbler OS version property
      */
     private static final String OS_VERSION = "os_version";
     /**
-     * TODO
+     * Constant to define the field name for the Cobbler initrd property
      */
     private static final String INITRD = "initrd";
     /**
-     * TODO
+     * Constant to define the field name for the Cobbler source repository property
      */
     private static final String SOURCE_REPOS = "source_repos";
     /**
-     * TODO
+     * Constant to define the field name for the Cobbler tree build time property
      */
     private static final String TREE_BUILD_TIME = "tree_build_time";
 
-    /** Cobbler distro name for default PXE boot */
+    /**
+     * Cobbler distro name for default PXE boot
+     */
     public static final String BOOTSTRAP_NAME = "pxe-default-image";
 
     private Distro(CobblerConnection clientIn) {
@@ -62,7 +70,7 @@ public class Distro extends CobblerObject {
      * Returns a distro matching the given name or null
      *
      * @param client the xmlrpc client
-     * @param name the distro name
+     * @param name   the distro name
      * @return the distro that maps to the name or null
      */
     public static Distro lookupByName(CobblerConnection client, String name) {
@@ -73,20 +81,20 @@ public class Distro extends CobblerObject {
      * Returns a distro matching the given uid or null
      *
      * @param client the xmlrpc client
-     * @param id the uid to search for
+     * @param id     the uid to search for
      * @return the distro matching the UID
      */
     public static Distro lookupById(CobblerConnection client, String id) {
         return handleLookup(client, lookupDataMapById(client,
-                                        id, "find_distro"));
+                id, "find_distro"));
     }
 
     /**
-     * TODO
+     * Creates a Distribution that is constructed by the Map that is handed to the function
      *
-     * @param client
-     * @param distroMap
-     * @return
+     * @param client The Client that holds the connection to the Cobbler server
+     * @param distroMap The Key-Value Map with the content of the distribution
+     * @return Either null or the distribution that has been build by the Map
      */
     private static Distro handleLookup(CobblerConnection client, Map distroMap) {
         if (distroMap != null) {
@@ -106,7 +114,7 @@ public class Distro extends CobblerObject {
     public static List<Distro> list(CobblerConnection connection) {
         List<Distro> distros = new LinkedList<>();
         List<Map<String, Object>> cDistros = (List<Map<String, Object>>)
-                                        connection.invokeMethod("get_distros");
+                connection.invokeMethod("get_distros");
 
         for (Map<String, Object> distroMap : cDistros) {
             Distro distro = new Distro(connection);
@@ -121,11 +129,10 @@ public class Distro extends CobblerObject {
      */
     @Override
     protected String invokeGetHandle() {
-        return (String)client.invokeTokenMethod("get_distro_handle", this.getName());
+        return (String) client.invokeTokenMethod("get_distro_handle", this.getName());
     }
 
     /**
-     *
      * @param key
      * @param value
      */
@@ -179,7 +186,7 @@ public class Distro extends CobblerObject {
      * @return the arch
      */
     public String getArch() {
-        return (String)dataMap.get(ARCH);
+        return (String) dataMap.get(ARCH);
     }
 
 
@@ -194,7 +201,7 @@ public class Distro extends CobblerObject {
      * @return the kernelPath
      */
     public String getKernel() {
-        return (String)dataMap.get(KERNEL);
+        return (String) dataMap.get(KERNEL);
     }
 
 
@@ -210,7 +217,7 @@ public class Distro extends CobblerObject {
      * @return the osVersion
      */
     public String getOsVersion() {
-        return (String)dataMap.get(OS_VERSION);
+        return (String) dataMap.get(OS_VERSION);
     }
 
 
@@ -226,7 +233,7 @@ public class Distro extends CobblerObject {
      * @return the initrdPath
      */
     public String getInitrd() {
-        return (String)dataMap.get(INITRD);
+        return (String) dataMap.get(INITRD);
     }
 
 
@@ -242,7 +249,7 @@ public class Distro extends CobblerObject {
      * @return the sourceRepos
      */
     public List<String> getSourceRepos() {
-        return (List<String>)dataMap.get(SOURCE_REPOS);
+        return (List<String>) dataMap.get(SOURCE_REPOS);
     }
 
 
@@ -257,7 +264,7 @@ public class Distro extends CobblerObject {
      * @return the treeBuildTime
      */
     public long getTreeBuildTime() {
-        return (Long)dataMap.get(TREE_BUILD_TIME);
+        return (Long) dataMap.get(TREE_BUILD_TIME);
     }
 
 
@@ -272,7 +279,7 @@ public class Distro extends CobblerObject {
      * @return the breed
      */
     public String getBreed() {
-        return (String)dataMap.get(BREED);
+        return (String) dataMap.get(BREED);
     }
 
 
@@ -301,6 +308,7 @@ public class Distro extends CobblerObject {
 
         /**
          * Set architecture
+         *
          * @param archIn value to set
          * @return this builder to chain operations
          */
@@ -311,6 +319,7 @@ public class Distro extends CobblerObject {
 
         /**
          * Set breed
+         *
          * @param breedIn value to set
          * @return this builder to chain operations
          */
@@ -321,6 +330,7 @@ public class Distro extends CobblerObject {
 
         /**
          * Set initrd path
+         *
          * @param initrdIn value to set
          * @return this builder to chain operations
          */
@@ -331,6 +341,7 @@ public class Distro extends CobblerObject {
 
         /**
          * Set kernel path
+         *
          * @param kernelIn value to set
          * @return this builder to chain operations
          */
@@ -341,6 +352,7 @@ public class Distro extends CobblerObject {
 
         /**
          * Set kernel options
+         *
          * @param kernelOptionsIn value to set
          * @return this builder to chain operations
          */
@@ -351,6 +363,7 @@ public class Distro extends CobblerObject {
 
         /**
          * Set kernel options (post install)
+         *
          * @param kernelOptionsPostIn value to set
          * @return this builder to chain operations
          */
@@ -361,6 +374,7 @@ public class Distro extends CobblerObject {
 
         /**
          * Set kickstart metadata
+         *
          * @param ksmetaIn value to set
          * @return this builder to chain operations
          */
@@ -371,6 +385,7 @@ public class Distro extends CobblerObject {
 
         /**
          * Set distro name
+         *
          * @param nameIn value to set
          * @return this builder to chain operations
          */
@@ -381,6 +396,7 @@ public class Distro extends CobblerObject {
 
         /**
          * Set OS version
+         *
          * @param osVersionIn value to set
          * @return this builder to chain operations
          */
@@ -391,6 +407,7 @@ public class Distro extends CobblerObject {
 
         /**
          * Create the distro with the current builder settings
+         *
          * @param connection Connection to use for Distro creation
          * @return this builder to chain operations
          */

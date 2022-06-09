@@ -41,55 +41,55 @@ public class Profile extends CobblerObject {
      */
     private static Logger log = LogManager.getLogger(Profile.class);
     /**
-     * TODO
+     * Cobbler field name for the DHCP Tag
      */
     private static final String DHCP_TAG = "dhcp_tag";
     /**
-     * TODO
+     * Cobbler field name for the auto-installation property
      */
     private static final String KICKSTART = "autoinstall";
     /**
-     * TODO
+     * Cobbler field name for the virtual bridge property
      */
     private static final String VIRT_BRIDGE = "virt_bridge";
     /**
-     * TODO
+     * Cobbler field name for the number of virtual CPU cores to assign to a VM
      */
     private static final String VIRT_CPUS = "virt_cpus";
     /**
-     * TODO
+     * Cobbler field name for the type of VM that is created
      */
     private static final String VIRT_TYPE = "virt_type";
     /**
-     * TODO
+     * Cobbler field name for the repository property
      */
     private static final String REPOS = "repos";
     /**
-     * TODO
+     * Cobbler field name for the path to the virtual machine disk image
      */
     private static final String VIRT_PATH = "virt_path";
     /**
-     * TODO
+     * Cobbler field name to override the server templating variable
      */
     private static final String SERVER = "server";
     /**
-     * TODO
+     * Cobbler field name for the name servers
      */
     private static final String NAME_SERVERS = "name_servers";
     /**
-     * TODO
+     * Cobbler field name whether to enable the visibility in the boot menu or not
      */
     private static final String ENABLE_MENU = "enable_menu";
     /**
-     * TODO
+     * Cobbler field name for the size of the created disk image(s)
      */
     private static final String VIRT_FILE_SIZE = "virt_file_size";
     /**
-     * TODO
+     * Cobbler field name for the amount of RAM assigned to the created VM
      */
     private static final String VIRT_RAM = "virt_ram";
     /**
-     * TODO
+     * Cobbler field name for the name of the distribution that is being used for the profile
      */
     private static final String DISTRO = "distro";
 

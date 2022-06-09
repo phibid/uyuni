@@ -83,31 +83,31 @@ public abstract class CobblerObject {
      */
     protected static final String SET_KS_META = "autoinstall_meta";
     /**
-     * TODO
+     * Constant to define the field name for the Cobbler parent property
      */
     protected static final String PARENT = "parent";
     /**
-     * TODO
+     * Constant to define the field name for the Cobbler modification time property
      */
     protected static final String MTIME = "mtime";
     /**
-     * TODO
+     * Constant to define the field name for the Cobbler management classes property
      */
     protected static final String MGMT_CLASSES = "mgmt_classes";
     /**
-     * TODO
+     * Constant to define the field name for the Cobbler template files property
      */
     protected static final String TEMPLATE_FILES = "template_files";
     /**
-     * TODO
+     * Constant to define the field name for the Cobbler uid property
      */
     protected static final String UID = "uid";
     /**
-     * TODO
+     * Constant to define the field name for the Cobbler redhat management key property
      */
     private static final String REDHAT_KEY = "redhat_management_key";
     /**
-     * TODO
+     * Constant to define the value Cobbler uses for inheritance
      */
     public static final String INHERIT_KEY = "<<inherit>>";
 
@@ -202,57 +202,62 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * This method executes the Cobbler server side modification with a raw value
      *
-     * @param key   TODO
-     * @param value TODO
+     * @param key   The key to modify. This normally is one of the predefined constants
+     * @param value The value to modify.
      */
     protected abstract void invokeModify(String key, Object value);
 
     /**
-     * TODO
+     * This method executes the Cobbler server side modification with a resolved value
      *
-     * @param key   TODO
-     * @param value TODO
+     * @param key   The key to modify. This normally is one of the predefined constants
+     * @param value The value to modify.
      */
     protected abstract void invokeModifyResolved(String key, Object value);
 
     /**
-     * TODO
+     * This method saves the entire object that is cached Cobbler server side to the disk.
      */
     protected abstract void invokeSave();
 
     /**
-     * TODO
+     * This method removes the object from the Cobbler server
      *
-     * @return TODO
+     * @return Whether the removal of the object was successful or not
      */
     protected abstract boolean invokeRemove();
 
     /**
-     * TODO
+     * This method retrieves the XML-RPC handle from the Cobbler server via the objects name
      *
-     * @return TODO
+     * @return The XML-RPC handle. If the handle has a {@code ___NEW___} prefix it was not saved to disk.
      */
     protected abstract String invokeGetHandle();
 
     /**
-     * TODO
+     * This method forgets the local state of the object and loads the current state from the Cobbler server
      */
     protected abstract void reload();
 
     /**
-     * TODO
+     * This method renames the current object
+     * <p>
+     * Modifying the name property directly will not work as expected.
      *
-     * @param newName TODO
+     * @param newName The new name for the object
      */
     protected abstract void invokeRename(String newName);
 
     /**
-     * TODO
+     * This method retrieves the resolved value for an object. This is
+     * different from the raw value in the sense that some properties in
+     * Cobbler have the ability to be resolved to either a parent objects
+     * value or the application Settings.
      *
-     * @param key TODO
-     * @return TODO
+     * @param key The constant for the property of the field name in Cobbler
+     * @return The resolved value or in case an attribute doesn't resolve its raw value
      */
     protected final Object getResolvedValue(String key) {
         return client.invokeTokenMethod("get_item_resolved_value", getUid(), key);
@@ -271,10 +276,12 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * This method modifies the object on Cobbler server side.
      *
-     * @param key   TODO
-     * @param value TODO
+     * @param key   The property name. Normally this is one of the constants
+     *              defined above.
+     * @param value The new value for the property. This must be a "raw" object
+     *              value and not a resolved one.
      */
     protected void modify(String key, Object value) {
         invokeModify(key, value);
@@ -282,10 +289,15 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * This method modifies the object on Cobbler server side. It removes
+     * duplicated content that is inherited from other objects. As this
+     * function causes a lot of overhead on the server, please use it only when
+     * needed.
      *
-     * @param key   TODO
-     * @param value TODO
+     * @param key   The property name. Normally this is one of the constants
+     *              defined above.
+     * @param value The new value for the property. This may be a "raw" object
+     *              value or a resolved one.
      */
     protected void modifyResolved(String key, Object value) {
         invokeModifyResolved(key, value);
@@ -310,7 +322,7 @@ public abstract class CobblerObject {
 
 
     /**
-     * TODO
+     * Getter for the comment
      *
      * @return the comment
      */
@@ -320,7 +332,7 @@ public abstract class CobblerObject {
 
 
     /**
-     * TODO
+     * Setter for the comment
      *
      * @param commentIn the comment to set
      */
@@ -329,9 +341,12 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Getter for the management classes in their raw form
      *
      * @return the managementClasses
+     * @cobbler.inheritable This property can have the value
+     *                      {@link #INHERIT_KEY} and thus has an accompanying
+     *                      method {@link #getResolvedManagementClasses()}.
      */
     @SuppressWarnings("unchecked")
     public Optional<List<String>> getManagementClasses() {
@@ -342,7 +357,7 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Getter for the management classes in their resolved form
      *
      * @return the managementClasses
      */
@@ -352,7 +367,7 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Setter for the management classes in their raw form.
      *
      * @param managementClassesIn the managementClasses to set
      */
@@ -366,9 +381,9 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Setter for the management classes in their resolved form
      *
-     * @param managementClassesIn TODO
+     * @param managementClassesIn the managementClasses to set
      */
     public void setResolvedManagementClasses(List<String> managementClassesIn) {
         modifyResolved(MGMT_CLASSES, managementClassesIn);
@@ -376,7 +391,7 @@ public abstract class CobblerObject {
 
 
     /**
-     * TODO
+     * Getter for the template files
      *
      * @return the templateFiles
      */
@@ -387,7 +402,7 @@ public abstract class CobblerObject {
 
 
     /**
-     * TODO
+     * Setter for the template files
      *
      * @param templateFilesIn the templateFiles to set
      */
@@ -397,7 +412,7 @@ public abstract class CobblerObject {
 
 
     /**
-     * TODO
+     * Getter for the uid
      *
      * @return the uid
      */
@@ -406,7 +421,7 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Alias for the uid
      *
      * @return the uid
      */
@@ -415,7 +430,7 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Setter for the uid
      *
      * @param uidIn the uid to set
      */
@@ -425,7 +440,7 @@ public abstract class CobblerObject {
 
 
     /**
-     * TODO
+     * Getter for the Parent of the object
      *
      * @return the parent
      */
@@ -435,7 +450,7 @@ public abstract class CobblerObject {
 
 
     /**
-     * TODO
+     * Setter for the Parent of the object
      *
      * @param parentIn the parent to set
      */
@@ -444,9 +459,12 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Getter for the owners.
      *
      * @return the owners
+     * @cobbler.inheritable This field can have the value {@link #INHERIT_KEY}
+     *                      and thus has an accompanying resolved method
+     *                      {@link #getResolvedOwners()}.
      */
     @SuppressWarnings("unchecked")
     public List<String> getOwners() {
@@ -454,7 +472,7 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Getter to retrieve the resolved owners
      *
      * @return the owners
      */
@@ -464,16 +482,19 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Setter for the owners
      *
      * @param ownersIn the owners to set
+     * @cobbler.inheritable This field can have the value {@link #INHERIT_KEY}
+     *                      and thus has an accompanying resolved method
+     *                      {@link #setResolvedOwners(List)} ()}.
      */
     public void setOwners(List<String> ownersIn) {
         modify(OWNERS, ownersIn);
     }
 
     /**
-     * TODO
+     * Setter for the resolved owners
      *
      * @param ownersIn the owners to set
      */
@@ -644,7 +665,8 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Setter for the kernel post options via {@link #INHERIT_KEY} or as a
+     * string that is splittable by Pythons shelx.split function.
      *
      * @param kernelOptionsPostIn the kernelOptionsPost to set
      */
@@ -653,19 +675,20 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Setter for the kernel post options via its raw value
      *
-     * @param kernelOptionsPostIn the kernelOptionsPost to set in the form of a map
+     * @param kernelOptionsPostIn the kernelOptionsPost to set in the form of
+     *                            a map
      */
     public void setKernelOptionsPost(Map<String, Object> kernelOptionsPostIn) {
         setKernelOptionsPost(convertOptionsMap(kernelOptionsPostIn));
     }
 
     /**
-     * TODO
+     * Retrieves the raw auto-installation metadata for the object.
      *
-     * @return the kernelMeta
-     * @cobbler.inheritable P
+     * @return The kernelMeta. It could be that this returns {@link #INHERIT_KEY} instead of a Map.
+     * @cobbler.inheritable This property has a matching resolved method. {@link #getResolvedAutoinstallMeta()}
      */
     @SuppressWarnings("unchecked")
     public Map<String, Object> getKsMeta() {
@@ -673,7 +696,7 @@ public abstract class CobblerObject {
     }
 
     /**
-     * TODO
+     * Retrieves the resolved auto-installation metadata for the object.
      *
      * @return the kernelMeta
      */

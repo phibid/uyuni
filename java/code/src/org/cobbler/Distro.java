@@ -133,8 +133,7 @@ public class Distro extends CobblerObject {
     }
 
     /**
-     * @param key
-     * @param value
+     * @inheritDoc
      */
     @Override
     protected void invokeModify(String key, Object value) {

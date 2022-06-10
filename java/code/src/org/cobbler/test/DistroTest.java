@@ -26,26 +26,26 @@ import java.util.HashMap;
 
 /**
  * @author paji
- *
  */
-public class DistroTest  {
-   private CobblerConnection client;
+public class DistroTest {
+    private CobblerConnection client;
 
-   public void setUpXX() throws Exception {
-       client = new CobblerConnection("http://localhost/cobbler_api_rw",
-                       "admin", "foo");
-   }
+    public void setUpXX() throws Exception {
+        client = new CobblerConnection("http://localhost/cobbler_api_rw",
+                "admin", "foo");
+    }
 
     @Test
-   public void testFoo() {
-     //no op to keep junit happy
-   }
-   public void xxxtestDistroCreate() throws Exception {
+    public void testFoo() {
+        //no op to keep junit happy
+    }
+
+    public void xxxtestDistroCreate() throws Exception {
         String name = "Partha-Test";
         String kernel =
-            "/var/satellite/rhn/kickstart/ks-rhel-i386-as-4-u2//images/pxeboot/vmlinuz";
+                "/var/satellite/rhn/kickstart/ks-rhel-i386-as-4-u2//images/pxeboot/vmlinuz";
         String initrd =
-            "/var/satellite/rhn/kickstart/ks-rhel-i386-as-4-u2//images/pxeboot/initrd.img";
+                "/var/satellite/rhn/kickstart/ks-rhel-i386-as-4-u2//images/pxeboot/initrd.img";
         String breed = "redhat";
         String osVersion = "rhel4";
         String arch = "i386";

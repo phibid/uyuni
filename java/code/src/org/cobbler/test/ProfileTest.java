@@ -14,5 +14,147 @@
  */
 package org.cobbler.test;
 
+import static org.junit.Assert.fail;
+
+import org.junit.Test;
+
 public class ProfileTest {
+
+    @Test
+    public void testInvokeGetHandle() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testInvokeModify() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testInvokeModifyResolved() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testInvokeSave() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testInvokeRemove() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testReload() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testRename() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testDhcpTag() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testKickstart() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testVirtBridge() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testVirtCpus() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testVirtType() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testGetRepos() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testVirtPath() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testServer() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testNameServers() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testMenuEnabled() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testVirtFileSize() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testVirtRam() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testGenerateKickstart() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testSyncRedHatManagementKeys() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testGetFullAutoinstallPath() {
+        // TODO
+        fail("Not implemented");
+    }
+
+    @Test
+    public void testGetRelativeAutoinstallPath() {
+        // TODO
+        fail("Not implemented");
+    }
 }

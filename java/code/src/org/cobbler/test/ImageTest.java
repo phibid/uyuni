@@ -15,12 +15,12 @@
 
 package org.cobbler.test;
 
+import static com.redhat.rhn.testing.RhnBaseTestCase.assertContains;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.redhat.rhn.manager.kickstart.cobbler.CobblerXMLRPCHelper;
-import com.redhat.rhn.testing.BaseTestCaseWithUser;
 import com.redhat.rhn.testing.TestUtils;
 
 import org.cobbler.CobblerConnection;
@@ -36,44 +36,54 @@ import java.util.Map;
 /**
  * Tests Image.
  */
-public class ImageTest extends BaseTestCaseWithUser {
+public class ImageTest {
 
-    /** Image name used by setUp(). */
+    /**
+     * Image name used by setUp().
+     */
     private static final String EXPECTED_NAME = "test";
 
-    /** File name used by setUp(). */
+    /**
+     * File name used by setUp().
+     */
     private static final String EXPECTED_FILE = "dummy.file";
 
-    /** Image type used by setUp(). */
+    /**
+     * Image type used by setUp().
+     */
     private static final String EXPECTED_TYPE = Image.TYPE_ISO;
 
-    /** The connection. */
+    /**
+     * The connection.
+     */
     private CobblerConnection connection;
 
-    /** The image. */
+    /**
+     * The image.
+     */
     private Image image;
 
     /**
      * Sets up a connection and image.
+     *
      * @throws Exception in case anything goes wrong
      */
     @BeforeEach
     public void setUp() throws Exception {
-        super.setUp();
         MockConnection.clear();
-        connection = CobblerXMLRPCHelper.getConnection(user.getLogin());
+        connection = new MockConnection("http://localhost", "token");
         image = Image.create(connection, EXPECTED_NAME, EXPECTED_TYPE, EXPECTED_FILE);
         assertNotNull(image);
     }
 
     /**
      * Removes the image created by setUp().
+     *
      * @throws Exception in case anything goes wrong
      */
     @AfterEach
     public void tearDown() throws Exception {
         assertTrue(image.remove());
-        super.tearDown();
     }
 
     /**
@@ -137,15 +147,16 @@ public class ImageTest extends BaseTestCaseWithUser {
     /**
      * Check in MockConnection that the current image has a certain value
      * corresponding to a key.
+     *
      * @param expected the expected value for key
-     * @param key the key
+     * @param key      the key
      */
     @SuppressWarnings("unchecked")
     private void assertImageKeyEquals(String expected, String key) {
         HashMap<String, Object> criteria = new HashMap<>();
         criteria.put("uid", image.getId());
         List<Map<String, Object>> result = (List<Map<String, Object>>) connection
-            .invokeMethod("find_image", criteria);
+                .invokeMethod("find_image", criteria);
         assertEquals(expected, result.get(0).get(key));
     }
 }

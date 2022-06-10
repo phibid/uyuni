@@ -36,9 +36,9 @@ import java.util.Map;
  */
 public class MockConnection extends CobblerConnection {
     private String token;
-    private String url;
+    private final String url;
 
-    private Logger log = LogManager.getLogger(MockConnection.class);
+    private final Logger log = LogManager.getLogger(MockConnection.class);
 
     private static List<Map> profiles = new ArrayList<>();
     private static List<Map> distros = new ArrayList<>();
@@ -51,7 +51,7 @@ public class MockConnection extends CobblerConnection {
     private static Map<String, Map> distroMap = new HashMap<>();
     private static Map<String, Map> imageMap = new HashMap<>();
 
-    private static List<String> powerCommands = new ArrayList<>();
+    private static final List<String> POWER_COMMANDS = new ArrayList<>();
 
     private static final Map<String, String> REMAP_KEYS = new HashMap<>();
 
@@ -64,7 +64,8 @@ public class MockConnection extends CobblerConnection {
     /**
      * Mock constructors for Cobbler connection
      * Don't care..
-     * @param urlIn whatever url
+     *
+     * @param urlIn  whatever url
      * @param userIn user
      * @param passIn password
      */
@@ -76,7 +77,8 @@ public class MockConnection extends CobblerConnection {
     /**
      * Mock constructors for Cobbler connection
      * Don't care..
-     * @param urlIn whatever url
+     *
+     * @param urlIn   whatever url
      * @param tokenIn session token.
      */
     public MockConnection(String urlIn, String tokenIn) {
@@ -89,6 +91,7 @@ public class MockConnection extends CobblerConnection {
     /**
      * Mock constructors for Cobbler connection
      * Don't care..
+     *
      * @param urlIn whatever url
      */
     public MockConnection(String urlIn) {
@@ -96,170 +99,173 @@ public class MockConnection extends CobblerConnection {
         url = urlIn;
     }
 
-   public Object invokeMethod(String name, Object... args) {
-    //no op -> mock version ..
-    // we'll add more useful constructs in the future..
-    // log.debug("called: " + name + " args: " + args);
-    if ("token_check".equals(name) || "update".equals(name)) {
-        return true;
-    }
-    if ("login".equals(name)) {
-        return random();
-    }
-
-    if (name.startsWith("modify_") && "autoinstall_meta".equals(args[1])) {
-        args[1] = "autoinstall_meta";
-    }
-
-    //profiles:
-    if ("get_profiles".equals(name)) {
-        return profiles;
-    }
-    else if ("find_profile".equals(name)) {
-        return find((Map)args[0], profiles);
-    }
-    else if (name.equals("modify_profile")) {
-        log.debug("PROFILE: Modify  w/ handle{}, set {}to {}", args[0], args[1], args[2]);
-        profileMap.get(args[0]).put(args[1], args[2]);
-    }
-    else if ("get_profile".equals(name)) {
-        return findByName((String)args[0], profiles);
-    }
-    else if ("get_profile_handle".equals(name)) {
-        String key = random();
-        log.debug("PROFILE:  Got handle  w/ name {}", args[0]);
-        profileMap.put(key, findByName((String) args[0], profiles));
-        return key;
-    }
-    else if ("remove_profile".equals(name)) {
-        profiles.remove(findByName((String)args[0], profiles));
-        return true;
-    }
-    else if ("new_profile".equals(name)) {
-            return newProfile();
-    }
-    //distros
-    else if ("find_distro".equals(name)) {
-        return find((Map)args[0], distros);
-    }
-    else if ("get_distros".equals(name)) {
-        return distros;
-    }
-    else if (name.equals("modify_distro")) {
-        log.debug("DISTRO: Modify  w/ handle{}, set {}to {}", args[0], args[1], args[2]);
-        modifyDistro(args[0], args[1], args[2]);
-    }
-    else if ("get_distro".equals(name)) {
-        return findByName((String)args[0], distros);
-    }
-    else if ("rename_distro".equals(name)) {
-        log.debug("DISTRO: Rename w/ handle{}", args[0]);
-        distroMap.get(args[0]).put("name", args[2]);
-        return "";
-    }
-    else if ("get_distro_handle".equals(name)) {
-        log.debug("DISTRO:  Got handle  w/ name {}", args[0]);
-        String key = random();
-        distroMap.put(key, findByName((String) args[0], distros));
-        return key;
-    }
-    else if ("remove_distro".equals(name)) {
-        distros.remove(findByName((String)args[0], distros));
-        return true;
-    }
-    else if ("new_distro".equals(name)) {
-            return newDistro();
-    }
-    //System
-    else if ("find_system".equals(name)) {
-        return find((Map)args[0], systems);
-    }
-    else if ("get_systems".equals(name)) {
-        return systems;
-    }
-    else if (name.equals("modify_system")) {
-        Map system = systemMap.get(args[0]);
-        system.put(args[1], args[2]);
-        systemMap.get(args[0]).put(args[1], args[2]);
-    }
-    else if ("get_system".equals(name)) {
-        return findByName((String)args[0], systems);
-    }
-    else if ("get_system_handle".equals(name)) {
-        if (findByName((String) args[0], systems) != null) {
-            String key = random();
-            systemMap.put(key, findByName((String) args[0], systems));
-            return key;
-        }
-        return null;
-    }
-    else if ("remove_system".equals(name)) {
-        systems.remove(findByName((String)args[0], systems));
-        return true;
-    }
-    else if ("new_system".equals(name)) {
-            return newSystem();
-    }
-    else if ("power_system".equals(name)) {
-        boolean firstArgumentValid = systemMap.containsKey(args[0]);
-            boolean secondArgumentValid = args[1].equals("on") || args[1].equals("off") ||
-                args[1].equals("reboot") || args[1].equals("status");
-        boolean thirdArgumentValid = args[2].equals(token);
-        if (firstArgumentValid && secondArgumentValid && thirdArgumentValid) {
-            powerCommands.add(name + " " + args[1] + " " +
-                    systemMap.get(args[0]).get("uid"));
+    public Object invokeMethod(String name, Object... args) {
+        //no op -> mock version ..
+        // we'll add more useful constructs in the future..
+        // log.debug("called: " + name + " args: " + args);
+        if ("token_check".equals(name) || "update".equals(name)) {
             return true;
         }
-        return false;
-    }
-    // images
-    else if ("find_image".equals(name)) {
-        return find((Map)args[0], images);
-    }
-    else if ("get_images".equals(name)) {
-        return images;
-    }
-    else if (name.equals("modify_image")) {
-        Map image = imageMap.get(args[0]);
-        image.put(args[1], args[2]);
-        imageMap.get(args[0]).put(args[1], args[2]);
-    }
-    else if ("rename_image".equals(name)) {
-        imageMap.get(args[0]).put("name", args[2]);
-        return "";
-    }
-    else if ("get_image".equals(name)) {
-        return findByName((String)args[0], images);
-    }
-    else if ("get_image_handle".equals(name)) {
-        if (findByName((String) args[0], images) != null) {
+        if ("login".equals(name)) {
+            return random();
+        }
+
+        if (name.startsWith("modify_") && "autoinstall_meta".equals(args[1])) {
+            args[1] = "autoinstall_meta";
+        }
+
+        //profiles:
+        if ("get_profiles".equals(name)) {
+            return profiles;
+        }
+        else if ("find_profile".equals(name)) {
+            return find((Map) args[0], profiles);
+        }
+        else if (name.equals("modify_profile")) {
+            log.debug("PROFILE: Modify  w/ handle{}, set {}to {}", args[0], args[1], args[2]);
+            profileMap.get(args[0]).put(args[1], args[2]);
+        }
+        else if ("get_profile".equals(name)) {
+            return findByName((String) args[0], profiles);
+        }
+        else if ("get_profile_handle".equals(name)) {
             String key = random();
-            imageMap.put(key, findByName((String) args[0], images));
+            log.debug("PROFILE:  Got handle  w/ name {}", args[0]);
+            profileMap.put(key, findByName((String) args[0], profiles));
             return key;
         }
-        return null;
+        else if ("remove_profile".equals(name)) {
+            profiles.remove(findByName((String) args[0], profiles));
+            return true;
+        }
+        else if ("new_profile".equals(name)) {
+            return newProfile();
+        }
+        //distros
+        else if ("find_distro".equals(name)) {
+            return find((Map) args[0], distros);
+        }
+        else if ("get_distros".equals(name)) {
+            return distros;
+        }
+        else if (name.equals("modify_distro")) {
+            log.debug("DISTRO: Modify  w/ handle{}, set {}to {}", args[0], args[1], args[2]);
+            modifyDistro(args[0], args[1], args[2]);
+        }
+        else if ("get_distro".equals(name)) {
+            return findByName((String) args[0], distros);
+        }
+        else if ("rename_distro".equals(name)) {
+            log.debug("DISTRO: Rename w/ handle{}", args[0]);
+            distroMap.get(args[0]).put("name", args[2]);
+            return "";
+        }
+        else if ("get_distro_handle".equals(name)) {
+            log.debug("DISTRO:  Got handle  w/ name {}", args[0]);
+            String key = random();
+            distroMap.put(key, findByName((String) args[0], distros));
+            return key;
+        }
+        else if ("remove_distro".equals(name)) {
+            distros.remove(findByName((String) args[0], distros));
+            return true;
+        }
+        else if ("new_distro".equals(name)) {
+            return newDistro();
+        }
+        //System
+        else if ("find_system".equals(name)) {
+            return find((Map) args[0], systems);
+        }
+        else if ("get_systems".equals(name)) {
+            return systems;
+        }
+        else if (name.equals("modify_system")) {
+            Map system = systemMap.get(args[0]);
+            system.put(args[1], args[2]);
+            systemMap.get(args[0]).put(args[1], args[2]);
+        }
+        else if ("get_system".equals(name)) {
+            return findByName((String) args[0], systems);
+        }
+        else if ("get_system_handle".equals(name)) {
+            if (findByName((String) args[0], systems) != null) {
+                String key = random();
+                systemMap.put(key, findByName((String) args[0], systems));
+                return key;
+            }
+            return null;
+        }
+        else if ("remove_system".equals(name)) {
+            systems.remove(findByName((String) args[0], systems));
+            return true;
+        }
+        else if ("new_system".equals(name)) {
+            return newSystem();
+        }
+        else if ("power_system".equals(name)) {
+            boolean firstArgumentValid = systemMap.containsKey(args[0]);
+            boolean secondArgumentValid = args[1].equals("on") || args[1].equals("off") ||
+                    args[1].equals("reboot") || args[1].equals("status");
+            boolean thirdArgumentValid = args[2].equals(token);
+            if (firstArgumentValid && secondArgumentValid && thirdArgumentValid) {
+                POWER_COMMANDS.add(name + " " + args[1] + " " +
+                        systemMap.get(args[0]).get("uid"));
+                return true;
+            }
+            return false;
+        }
+        // images
+        else if ("find_image".equals(name)) {
+            return find((Map) args[0], images);
+        }
+        else if ("get_images".equals(name)) {
+            return images;
+        }
+        else if (name.equals("modify_image")) {
+            Map image = imageMap.get(args[0]);
+            image.put(args[1], args[2]);
+            imageMap.get(args[0]).put(args[1], args[2]);
+        }
+        else if ("rename_image".equals(name)) {
+            imageMap.get(args[0]).put("name", args[2]);
+            return "";
+        }
+        else if ("get_image".equals(name)) {
+            return findByName((String) args[0], images);
+        }
+        else if ("get_image_handle".equals(name)) {
+            if (findByName((String) args[0], images) != null) {
+                String key = random();
+                imageMap.put(key, findByName((String) args[0], images));
+                return key;
+            }
+            return null;
+        }
+        else if ("remove_image".equals(name)) {
+            images.remove(findByName((String) args[0], images));
+            return true;
+        }
+        else if ("new_image".equals(name)) {
+            Map<String, Object> image = new HashMap<>();
+            String uid = random();
+            image.put("uid", uid);
+            images.add(image);
+            imageMap.put(uid, image);
+            return uid;
+        }
+        // other
+        else if ("sync".equals(name)) {
+            return true;
+        }
+        else if ("version".equals(name)) {
+            return 2.2;
+        }
+        else {
+            log.debug("Unhandled xmlrpc call in MockConnection: {}", name);
+        }
+        return "";
     }
-    else if ("remove_image".equals(name)) {
-        images.remove(findByName((String)args[0], images));
-        return true;
-    }
-    else if ("new_image".equals(name)) {
-        Map<String, Object> image = new HashMap<>();
-        String uid = random();
-        image.put("uid", uid);
-        images.add(image);
-        imageMap.put(uid, image);
-        return uid;
-    }
-    // other
-    else if ("sync".equals(name)) {
-        return true;
-    }
-    else {
-        log.debug("Unhandled xmlrpc call in MockConnection: {}", name);
-    }
-    return "";
-   }
 
     private void modifyDistro(Object arg, Object arg1, Object arg2) {
         Map distro = distroMap.get(arg);
@@ -339,36 +345,36 @@ public class MockConnection extends CobblerConnection {
         return key;
     }
 
-   private Map findByName(String name, List<Map> maps) {
-       for (Map map : maps) {
-           if (name.equals(map.get("name"))) {
-               return map;
-           }
-       }
-       return null;
-   }
+    private Map findByName(String name, List<Map> maps) {
+        for (Map map : maps) {
+            if (name.equals(map.get("name"))) {
+                return map;
+            }
+        }
+        return null;
+    }
 
 
-   private List<Map<String, Object>> find(Map<String, Object> criteria, List<Map> maps) {
-       List<Map<String, Object>> ret = new LinkedList<>();
-       for (Map map : maps) {
-           int matched = 0;
-           for (String key : criteria.keySet()) {
-               if (!criteria.get(key).equals(map.get(key))) {
-                   break;
-               }
-               matched++;
-           }
-           if (matched == criteria.size()) {
-               ret.add(map);
-           }
-       }
-       return ret;
-   }
+    private List<Map<String, Object>> find(Map<String, Object> criteria, List<Map> maps) {
+        List<Map<String, Object>> ret = new LinkedList<>();
+        for (Map map : maps) {
+            int matched = 0;
+            for (String key : criteria.keySet()) {
+                if (!criteria.get(key).equals(map.get(key))) {
+                    break;
+                }
+                matched++;
+            }
+            if (matched == criteria.size()) {
+                ret.add(map);
+            }
+        }
+        return ret;
+    }
 
-   private String random() {
-       return RandomStringUtils.randomAlphabetic(10);
-   }
+    private String random() {
+        return RandomStringUtils.randomAlphabetic(10);
+    }
 
     /**
      * {@inheritDoc}
@@ -382,6 +388,7 @@ public class MockConnection extends CobblerConnection {
 
     /**
      * updates the token
+     *
      * @param tokenIn the cobbler auth token
      */
     public void setToken(String tokenIn) {
@@ -403,19 +410,21 @@ public class MockConnection extends CobblerConnection {
     /**
      * Returns a list of strings with the latest power commands received by this
      * connection.
+     *
      * @return the latest commands
      */
     public static List<String> getPowerCommands() {
-        return powerCommands;
+        return POWER_COMMANDS;
     }
 
     /**
      * Returns a string with the latest power command received by this
      * connection or null.
+     *
      * @return the latest command
      */
     public static String getLatestPowerCommand() {
-        return powerCommands.get(powerCommands.size() - 1);
+        return POWER_COMMANDS.get(POWER_COMMANDS.size() - 1);
     }
 
     public static void clear() {

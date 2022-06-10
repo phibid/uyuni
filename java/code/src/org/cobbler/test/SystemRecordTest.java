@@ -18,8 +18,6 @@ package org.cobbler.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.redhat.rhn.manager.kickstart.cobbler.CobblerXMLRPCHelper;
-import com.redhat.rhn.testing.BaseTestCaseWithUser;
 import com.redhat.rhn.testing.TestUtils;
 
 import org.cobbler.CobblerConnection;
@@ -37,22 +35,26 @@ import java.util.Map;
 /**
  * Tests SystemRecord.
  */
-public class SystemRecordTest extends BaseTestCaseWithUser {
+public class SystemRecordTest {
 
-    /** The connection. */
+    /**
+     * The connection.
+     */
     private CobblerConnection connection;
 
-    /** The system. */
+    /**
+     * The system.
+     */
     private SystemRecord system;
 
     /**
      * Sets up a connection and system.
+     *
      * @throws Exception in case anything goes wrong
      */
     @BeforeEach
     public void setUp() throws Exception {
-        super.setUp();
-        connection = CobblerXMLRPCHelper.getConnection(user.getLogin());
+        connection = new MockConnection("http://localhost", "token");
         Distro distro = new Distro.Builder()
                 .setName("test-distro")
                 .setKernel("kernel")
@@ -172,15 +174,16 @@ public class SystemRecordTest extends BaseTestCaseWithUser {
     /**
      * Check in MockConnection that the current system has a certain value
      * corresponding to a key
+     *
      * @param expected the expected value for key
-     * @param key the key
+     * @param key      the key
      */
     @SuppressWarnings("unchecked")
     private void assertSystemKeyEquals(String expected, String key) {
         HashMap<String, Object> criteria = new HashMap<>();
         criteria.put("uid", system.getId());
         List<Map<String, Object>> result = (List<Map<String, Object>>) connection
-            .invokeMethod("find_system", criteria);
+                .invokeMethod("find_system", criteria);
         assertEquals(expected, result.get(0).get(key));
     }
 }

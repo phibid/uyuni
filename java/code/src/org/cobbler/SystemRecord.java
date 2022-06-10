@@ -698,7 +698,7 @@ public class SystemRecord extends CobblerObject {
      * Sets an additional ID for this system's power management system. The ID
      * is usually a type-specific identifier for the system or port to be
      * managed (eg. plug number on WTI, blade id on DRAC, etc.). See
-     * https://github.com/cobbler/cobbler/wiki/Power%20Management
+     * <a href="https://cobbler.readthedocs.io/en/latest/user-guide.html#power-management">in the Cobbler Wiki</a>
      *
      * @param powerId the ID
      */

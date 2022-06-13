@@ -14,10 +14,9 @@
  */
 package org.cobbler.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.cobbler.CobblerConnection;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class CobblerConnectionTest {
     @Test
@@ -29,7 +28,7 @@ public class CobblerConnectionTest {
         CobblerConnection result = new CobblerConnection("http://localhost");
 
         // Assert
-        assertEquals(result.getUrl(), expectedResult);
+        Assertions.assertEquals(result.getUrl(), expectedResult);
     }
 
     @Test
@@ -37,14 +36,14 @@ public class CobblerConnectionTest {
         // Arrange
         String username = "test";
         String password = "test";
-        String expectedResult = "test";
-        CobblerConnection connection = new CobblerConnection("http://localhost");
+        String expectedResult = "MyFakeToken";
+        CobblerConnection connection = new CobblerConnection("http://localhost", new MockXmlRpcClient());
 
         // Act
         String result = connection.login(username, password);
 
         // Assert
-        assertEquals(result, expectedResult);
+        Assertions.assertEquals(expectedResult, result);
     }
 
     @Test
@@ -56,7 +55,7 @@ public class CobblerConnectionTest {
         Object result = connection.invokeMethod("", "argument");
 
         // Assert
-        assertEquals(null, result);
+        Assertions.assertEquals(null, result);
     }
 
     @Test
@@ -68,7 +67,7 @@ public class CobblerConnectionTest {
         Object result = connection.invokeTokenMethod("", "argument");
 
         // Assert
-        assertEquals(null, result);
+        Assertions.assertEquals(null, result);
     }
 
     @Test
@@ -81,19 +80,19 @@ public class CobblerConnectionTest {
         String result = connection.getUrl();
 
         // Assert
-        assertEquals(expectedResult, result);
+        Assertions.assertEquals(expectedResult, result);
     }
 
     @Test
-    public void testVersion() {
+    public void testVersion() throws Exception {
         // Arrange
         Double expectedResult = 2.2;
-        CobblerConnection connection = new CobblerConnection("http://localhost");
+        CobblerConnection connection = new CobblerConnection("http://localhost", new MockXmlRpcClient());
 
         // Act
         Double result = connection.getVersion();
 
         // Assert
-        assertEquals(expectedResult, result);
+        Assertions.assertEquals(expectedResult, result);
     }
 }

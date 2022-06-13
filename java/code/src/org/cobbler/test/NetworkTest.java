@@ -14,13 +14,12 @@
  */
 package org.cobbler.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.cobbler.Network;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class NetworkTest {
 
@@ -52,7 +51,7 @@ public class NetworkTest {
         String result = network.getName();
 
         // Assert
-        assertEquals(interfaceName, result);
+        Assertions.assertEquals(interfaceName, result);
     }
 
     @Test

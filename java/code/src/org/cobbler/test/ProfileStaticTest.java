@@ -16,12 +16,15 @@
 package org.cobbler.test;
 
 import static org.junit.Assert.fail;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.cobbler.Distro;
 import org.cobbler.Profile;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 public class ProfileStaticTest {
 
@@ -32,33 +35,58 @@ public class ProfileStaticTest {
         connectionMock = new MockConnection("http://localhost", "token");
     }
 
+    @AfterEach
+    public void teardown() {
+        MockConnection.clear();
+    }
+
     @Test
     public void testProfileCreate() {
         // Arrange
-        Distro testDistro = new Distro.Builder().build(connectionMock);
+        String distroName = "testProfileCreate";
+        Distro testDistro = new Distro.Builder().setName(distroName).build(connectionMock);
 
         // Act
         Profile result = Profile.create(connectionMock, "", testDistro);
 
         // Assert
-        assertEquals(result.getDistro().getName(), "");
+        Assertions.assertEquals(result.getDistro().getName(), distroName);
     }
 
     @Test
     public void testProfileLookupByName() {
-        // TODO
-        fail("Not implemented");
+        // Arrange
+        String distroName = "testProfileCreate";
+        String profileName = "testProfileCreate";
+        Distro testDistro = new Distro.Builder().setName(distroName).build(connectionMock);
+        Profile testProfile = Profile.create(connectionMock, profileName, testDistro);
+
+        // Act
+        Profile result = Profile.lookupByName(connectionMock, profileName);
+
+        // Assert
+        Assertions.assertEquals(profileName, result.getName());
     }
 
     @Test
     public void testProfileLookupById() {
-        // TODO
-        fail("Not implemented");
+        // Arrange
+
+        // Act
+        Profile result = Profile.lookupById(connectionMock, "asdfasdfa");
+
+        // Assert
+        Assertions.assertEquals(null, result);
     }
 
     @Test
     public void testList() {
-        // TODO
-        fail("Not implemented");
+        // Arrange
+
+        // Act
+        List<Profile> result = Profile.list(connectionMock);
+
+        // Assert
+        Assertions.assertEquals(null, result);
     }
 }

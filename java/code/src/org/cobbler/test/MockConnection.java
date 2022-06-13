@@ -280,7 +280,7 @@ public class MockConnection extends CobblerConnection {
     }
 
     private String newProfile() {
-        Map profile = new HashMap();
+        Map<String, Object> profile = new HashMap<>();
         String uid = random();
         String key = random();
         profile.put("uid", uid);
@@ -323,7 +323,7 @@ public class MockConnection extends CobblerConnection {
     private String newDistro() {
         String uid = random();
 
-        Map distro = new HashMap();
+        Map<String, Object> distro = new HashMap<>();
         String key = random();
         distro.put("uid", uid);
 
